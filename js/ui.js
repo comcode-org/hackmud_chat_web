@@ -29,8 +29,10 @@ function replaceUI() {
 
 	main_div.innerHTML = ''
 
-	var user_ul = $("<ul>");
-	main_div.append(user_ul);
+	var user_ul = $('<ul class="tab-list">');
+	let tabset = $('<div class="tabset">');
+	tabset.append(user_ul);
+	main_div.append(tabset);
 
 	for (let name in act.users) {
 		user = act.users[name];
@@ -47,7 +49,11 @@ function replaceUI() {
 			user_div.show();
 		});
 
-		let chan_ul = $('<ul>');
+		let chan_ul = $('<ul class="tab-list">');
+		let tabset = $('<div class="tabset">');
+		tabset.append(chan_ul);
+		user_div.append(tabset);
+
 		for (let chan in user.channels) {
 			let li = $('<li>');
 			li.text(chan);
@@ -76,7 +82,6 @@ function replaceUI() {
 				});
 			}, 1000)
 		}
-		user_div.append(chan_ul);
 	}
 
 	$('.channel_area').hide();

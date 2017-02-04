@@ -1,0 +1,20 @@
+.channel_area {
+	overflow-y: scroll;
+	max-height: 50%;
+}
+
+/* I have no idea if this is the best way to handle the issues with float:left in navbars, or if 30px is a good value */
+.tabset {
+	min-height: 30px;
+}
+
+ul.tab-list {
+	list-style: none;
+}
+
+ul.tab-list li {
+	display: block;
+	float: left;
+	padding: 5px;
+	margin: 0px 10px;
+}
