@@ -1,5 +1,27 @@
+$(document).ready(function() {
+	var token = getToken();
+	if (token) {
+		act.update(token).then(replaceUI);
+	}
+})
+
 function login(pass) {
-	act.login(pass).then(replaceUI);
+	act.login(pass).then(function() {
+		saveToken();
+		replaceUI();
+	});
+}
+
+function saveToken() {
+	// saving the token as a cookie, rather than local storage, under the assumption that people are in the habit of clearing cookies specifically when they want to de-auth a site
+	document.cookie = 'chat_token=' + act.token;
+}
+function getToken() {
+	return readCookieValue('chat_token');
+}
+
+function readCookieValue(key) {
+	return document.cookie.replace(new RegExp('(?:(?:^|.*;\\s*)' + key + '\\s*\\=\\s*([^;]*).*$)|^.*$'), "$1");
 }
 
 function replaceUI() {
