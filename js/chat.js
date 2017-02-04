@@ -1,34 +1,39 @@
 var request;
 
 if(typeof window!="undefined") {
-    // browser
-    request=function(ops,cb) {
-        var x=new XMLHttpRequest();
-        x.onreadystatechange=function() {
-            if(x.readyState !== XMLHttpRequest.DONE)return;
-            cb(null,{statusCode:x.status},x.response);
-        }
+	// browser
+	request=function(ops,cb) {
+		var x=new XMLHttpRequest();
+		x.onreadystatechange=function() {
+			if(x.readyState !== XMLHttpRequest.DONE)return;
+			cb(null,{statusCode:x.status},JSON.parse(x.responseText));
+		}
 
-        x.open(ops.method,ops.uri);
-        x.setRequestHeader('Content-Type','application/json');
-        x.setRequestHeader('Accept','application/json');
-        x.send(JSON.stringify(ops.json))
-    }
+		x.open(ops.method,ops.uri);
+		x.setRequestHeader('Content-Type','application/json');
+		x.setRequestHeader('Accept','application/json');
+		x.send(JSON.stringify(ops.json))
+	}
 }
 else {
-    // node
-    request=require('request');
+	// node
+	request=require('request');
 }
+
+
+
+
+
 
 var API= {
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
-			request({ method: 'POST', uri: 'https://www.hackmud.com/mobile/'+endpoint+'.json', json:dat},
+			request({ method: 'POST', uri: 'https://hackmud.com/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
-					if(!error && response.statusCode == 200) {
-					  return resolve(JSON.parse(body))
-					}
-					return reject(error)
+					if(!error && response.statusCode == 200)
+						resolve(body)
+					else
+						reject({error:error,statusCode:response?response.statusCode:null,body:body})
 				}
 			)
 		})
@@ -57,9 +62,9 @@ Channel.prototype.send=function(msg) {
 	return API.create_chat(this.user.account.token,this.user.id,this.id,msg);
 }
 Channel.prototype.print=function() {
-	console.log('    Channel:');
-	console.log('      name : '+this.name)
-	console.log('      id   : '+this.id)
+	console.log('        Channel:');
+	console.log('          name : '+this.name)
+	console.log('          id   : '+this.id)
 }
 
 
@@ -95,14 +100,13 @@ User.prototype.getChannels=function() {
 	})
 }
 User.prototype.print=function() {
-	console.log('  User:');
-	console.log('    name : '+this.name)
-	console.log('    id   : '+this.id)
-	console.log('    channels:')
+	console.log('    User:');
+	console.log('      name : '+this.name)
+	console.log('      id   : '+this.id)
+	console.log('      channels:')
 	for(var i in this.channels)
 		this.channels[i].print();
 }
-
 
 
 function Account() {
@@ -149,6 +153,6 @@ Account.prototype.print=function() {
 }
 
 
+
+
 var act=new Account();
-act.update('TOKEN') // or act.login('PASS')
-	.then(act=>act.poll()).then(d=>console.log(JSON.stringify(d,null,2)));
