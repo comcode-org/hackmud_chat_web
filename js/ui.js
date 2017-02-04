@@ -74,11 +74,17 @@ function replaceUI() {
 			// TODO clean this up to not leak like hell
 			setInterval(function() {
 				list.poll().then(function(msgs) {
+					let at_bottom = msg_list[0].scrollHeight - msg_list.scrollTop() == msg_list.height();
+
 					msgs.forEach(m => {
 						let li = $('<li class="message">');
 						li.text(m.from_user + ": " + m.msg);
 						msg_list.append(li);
 					});
+
+					if (at_bottom) {
+						msg_list.scrollTop(1e10); // just scroll down a lot
+					}
 				});
 			}, 1000)
 
