@@ -28,7 +28,7 @@ else {
 var API= {
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
-			request({ method: 'POST', uri: 'https://hackmud.com/mobile/'+endpoint+'.json', json:dat},
+			request({ method: 'POST', uri: 'https://www.hackmud.com/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
 					if(!error && response.statusCode == 200)
 						resolve(body)
