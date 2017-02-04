@@ -1,8 +1,14 @@
 <html>
 	<head>
+		<script src="js/lib/jquery-1.12.4.min.js"></script>
 		<script src="js/chat.js"></script>
+		<script src="js/messages.js"></script>
+		<script src="js/ui.js"></script>
 	</head>
 	<body>
-		super seekret: <input onchange="act.login(this.value)">
+		super seekret: <input onchange="login(this.value)">
+
+		<div id="chat_area">
+		</div>
 	</body>
 </html>
