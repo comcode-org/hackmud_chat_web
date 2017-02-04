@@ -78,7 +78,9 @@ function replaceUI() {
 
 					msgs.forEach(m => {
 						let li = $('<li class="message">');
-						li.text(m.from_user + ": " + m.msg);
+						let date = new Date(m.t * 1000);
+						let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
+						li.text(timestr + " " + m.from_user + ": " + m.msg);
 						msg_list.append(li);
 					});
 
@@ -89,7 +91,7 @@ function replaceUI() {
 			}, 1000)
 
 			let form = $('<form action="">');
-			let input = $('<input type="text">');
+			let input = $('<input type="text" class="chat-input">');
 			form.submit(function() {
 				try {
 					let msg = input.val();

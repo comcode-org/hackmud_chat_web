@@ -3,6 +3,10 @@
 	max-height: 50%;
 }
 
+.chat-input {
+	width: 90%;
+}
+
 /* I have no idea if this is the best way to handle the issues with float:left in navbars, or if 30px is a good value */
 .tabset {
 	min-height: 30px;
