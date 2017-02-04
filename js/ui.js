@@ -68,7 +68,7 @@ function replaceUI() {
 				channel_div.show();
 			});
 
-			let msg_list = $('<ul>');
+			let msg_list = $('<ul class="message_list">');
 			channel_div.append(msg_list);
 
 			// TODO clean this up to not leak like hell
@@ -81,6 +81,21 @@ function replaceUI() {
 					});
 				});
 			}, 1000)
+
+			let form = $('<form action="">');
+			let input = $('<input type="text">');
+			form.submit(function() {
+				try {
+					let msg = input.val();
+					list.channel.send(msg);
+					input.val('');
+				} catch (e) {
+					console.error(e);
+				}
+				return false;
+			})
+			form.append(input);
+			channel_div.append(form);
 		}
 	}
 
