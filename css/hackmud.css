@@ -58,7 +58,7 @@ a:hover {
 .col-cap-B, .col-0, .timestamp {
 	color: #CACACA;
 }
-.col-b {
+.col-b, .chat-wrap {
 	color: #3F3F3F;
 }
 .col-cap-C {
