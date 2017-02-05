@@ -49,6 +49,11 @@ a:hover {
 	background-color: rgba(122,178,244,0.4);
 }
 
+.msg-content::before, .msg-content::after {
+	content: ":::";
+	color: #3F3F3F;
+}
+
 .col-cap-A, .col-1 {
 	color: #FFFFFF;
 }
@@ -58,7 +63,7 @@ a:hover {
 .col-cap-B, .col-0, .timestamp {
 	color: #CACACA;
 }
-.col-b, .chat-wrap {
+.col-b {
 	color: #3F3F3F;
 }
 .col-cap-C {
