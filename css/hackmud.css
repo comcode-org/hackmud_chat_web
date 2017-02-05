@@ -54,6 +54,10 @@ a:hover {
 	color: #3F3F3F;
 }
 
+.ignore {
+	opacity: 0.3;
+}
+
 .col-cap-A, .col-1 {
 	color: #FFFFFF;
 }
