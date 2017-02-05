@@ -13,3 +13,195 @@ body {
 .val {
 	color: #FF00EC;
 }
+
+.scr-user {
+	color: #9B9B9B;
+}
+.scr-trust {
+	color: #FF8000;
+}
+.scr-scr, .recd {
+	color: #1EFF00;
+}
+
+.trust {
+	color: #FF0000;
+}
+.array-messed-up {
+	color: #FFFFFF;
+}
+
+.gc-num {
+	color: #CACACA;
+}
+.gc-gc {
+	color: #9B9B9B;
+}
+.gc-k {
+	color: #00FFFF;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+a:hover {
+	background-color: rgba(122,178,244,0.4);
+}
+
+.col-cap-A {
+	color: #FFFFFF;
+}
+.col-a {
+	color: #000000;
+}
+.col-cap-B {
+	color: #CACACA;
+}
+.col-b {
+	color: #3F3F3F;
+}
+.col-cap-C {
+	color: #9B9B9B;
+}
+.col-c {
+	color: #676767;
+}
+.col-cap-D {
+	color: #FF0000;
+}
+.col-d {
+	color: #7D0000;
+}
+.col-cap-E {
+	color: #FF8383;
+}
+.col-e {
+	color: #8E3434;
+}
+.col-cap-F {
+	color: #FF8000;
+}
+.col-f {
+	color: #A34F00;
+}
+.col-cap-G {
+	color: #F3AA6F;
+}
+.col-g {
+	color: #725437;
+}
+.col-cap-H {
+	color: #FBC803;
+}
+.col-h {
+	color: #A88600;
+}
+.col-cap-I {
+	color: #FFD863;
+}
+.col-i {
+	color: #B2934A;
+}
+.col-cap-J {
+	color: #FFF404;
+}
+.col-j {
+	color: #939500;
+}
+.col-cap-K {
+	color: #F3F998;
+}
+.col-k {
+	color: #495225;
+}
+.col-cap-L {
+	color: #1EFF00;
+}
+.col-l {
+	color: #299400;
+}
+.col-cap-M {
+	color: #B3FF9B;
+}
+.col-m {
+	color: #23381B;
+}
+.col-cap-N {
+	color: #00FFFF;
+}
+.col-n {
+	color: #00535B;
+}
+.col-cap-O {
+	color: #8FE6FF;
+}
+.col-o {
+	color: #324A4C;
+}
+.col-cap-P {
+	color: #0070DD;
+}
+.col-p {
+	color: #0073A6;
+}
+.col-cap-Q {
+	color: #A4E3FF;
+}
+.col-q {
+	color: #385A6C;
+}
+.col-cap-R {
+	color: #0000FF;
+}
+.col-r {
+	color: #010067;
+}
+.col-cap-S {
+	color: #7AB2F4;
+}
+.col-s {
+	color: #507AA1;
+}
+.col-cap-T {
+	color: #B035EE;
+}
+.col-t {
+	color: #601C81;
+}
+.col-cap-U {
+	color: #E6C4FF;
+}
+.col-u {
+	color: #43314C;
+}
+.col-cap-V {
+	color: #FF00EC;
+}
+.col-v {
+	color: #8C0069;
+}
+.col-cap-W {
+	color: #FF96E0;
+}
+.col-w {
+	color: #973984;
+}
+.col-cap-X {
+	color: #FF0070;
+}
+.col-x {
+	color: #880024;
+}
+.col-cap-Y {
+	color: #FF6A98;
+}
+.col-y {
+	color: #762E4A;
+}
+.col-cap-Z {
+	color: #0C112B;
+}
+.col-z {
+	color: #101215;
+}

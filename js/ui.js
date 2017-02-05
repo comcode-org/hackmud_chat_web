@@ -78,9 +78,7 @@ function replaceUI() {
 
 					msgs.forEach(m => {
 						let li = $('<li class="message">');
-						let date = new Date(m.t * 1000);
-						let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
-						li.text(timestr + " " + m.from_user + ": " + m.msg);
+						li.html(formatMessage(m));
 						msg_list.append(li);
 					});
 
@@ -109,4 +107,19 @@ function replaceUI() {
 
 	$('.channel_area').hide();
 	$('.user_area').hide();
+}
+
+function formatMessage(obj) {
+	let date = new Date(obj.t * 1000);
+	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
+	let msg = escapeHtml(obj.msg).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, function(match, p1, p2) {
+		let css = (p1.match(/[A-Z]/) ? 'col-cap-' : 'col-') + p1;
+		return '<span class="' + css + '">' + p2 + '</span>';
+	});
+
+	return timestr + " " + obj.from_user + ": " + msg;
+}
+
+function escapeHtml(str) {
+	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
