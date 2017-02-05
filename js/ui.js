@@ -117,7 +117,7 @@ function formatMessage(obj) {
 		return '<span class="' + css + '">' + p2 + '</span>';
 	}).replace(/\n/g, '<br>');
 
-	return timestr + " " + obj.from_user + ": " + msg;
+	return '<span class="timestamp">' + timestr + "</span> " + obj.from_user + ": " + msg;
 }
 
 function escapeHtml(str) {

@@ -55,7 +55,7 @@ a:hover {
 .col-a {
 	color: #000000;
 }
-.col-cap-B, .col-0 {
+.col-cap-B, .col-0, .timestamp {
 	color: #CACACA;
 }
 .col-b {
