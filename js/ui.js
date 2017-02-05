@@ -115,7 +115,7 @@ function formatMessage(obj) {
 	let msg = escapeHtml(obj.msg).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, function(match, p1, p2) {
 		let css = (p1.match(/[A-Z]/) ? 'col-cap-' : 'col-') + p1;
 		return '<span class="' + css + '">' + p2 + '</span>';
-	});
+	}).replace(/\n/g, '<br>');
 
 	return timestr + " " + obj.from_user + ": " + msg;
 }
