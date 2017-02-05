@@ -49,13 +49,13 @@ a:hover {
 	background-color: rgba(122,178,244,0.4);
 }
 
-.col-cap-A {
+.col-cap-A, .col-1 {
 	color: #FFFFFF;
 }
 .col-a {
 	color: #000000;
 }
-.col-cap-B {
+.col-cap-B, .col-0 {
 	color: #CACACA;
 }
 .col-b {
@@ -79,7 +79,7 @@ a:hover {
 .col-e {
 	color: #8E3434;
 }
-.col-cap-F {
+.col-cap-F, .col-5 {
 	color: #FF8000;
 }
 .col-f {
@@ -115,7 +115,7 @@ a:hover {
 .col-k {
 	color: #495225;
 }
-.col-cap-L {
+.col-cap-L, .col-2 {
 	color: #1EFF00;
 }
 .col-l {
@@ -139,7 +139,7 @@ a:hover {
 .col-o {
 	color: #324A4C;
 }
-.col-cap-P {
+.col-cap-P, .col-3 {
 	color: #0070DD;
 }
 .col-p {
@@ -163,7 +163,7 @@ a:hover {
 .col-s {
 	color: #507AA1;
 }
-.col-cap-T {
+.col-cap-T, .col-4 {
 	color: #B035EE;
 }
 .col-t {
