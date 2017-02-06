@@ -59,7 +59,6 @@ function replaceUI() {
 			li.text(chan);
 			chan_ul.append(li);
 
-			let list = new MessageList(user.channels[chan]);
 
 			let channel_div = $('<div class="channel_area">');
 			user_div.append(channel_div);
@@ -71,19 +70,23 @@ function replaceUI() {
 			let msg_list = $('<ul class="message_list">');
 			channel_div.append(msg_list);
 
+			let list = new MessageList(user.channels[chan], msg_list);
+
 			// TODO clean this up to not leak like hell
 			setInterval(function() {
 				list.poll().then(function(msgs) {
 					let at_bottom = msg_list[0].scrollHeight - msg_list.scrollTop() == msg_list.height();
 
 					msgs.forEach(m => {
-						let li = $('<li class="message">');
-						li.html(formatMessage(m));
-						msg_list.append(li);
+						classList = ['message'];
+						if (settings.ignore_list.includes(m.from_user)) {
+							classList.push('ignore');
+						}
+						list.write(formatMessage(m), classList);
 					});
 
 					if (at_bottom) {
-						msg_list.scrollTop(1e10); // just scroll down a lot
+						list.scrollToBottom();
 					}
 				});
 			}, 1000)
@@ -93,7 +96,14 @@ function replaceUI() {
 			form.submit(function() {
 				try {
 					let msg = input.val();
-					list.channel.send(msg);
+					if (msg[0] == '/') {
+						list.handleSlashCommand(msg.slice(1));
+					} else {
+						if (settings.color_code) {
+							msg = '`' + settings.color_code + msg + '`';
+						}
+						list.channel.send(msg);
+					}
 					input.val('');
 				} catch (e) {
 					console.error(e);
@@ -112,14 +122,17 @@ function replaceUI() {
 function formatMessage(obj) {
 	let date = new Date(obj.t * 1000);
 	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
-	let msg = escapeHtml(obj.msg).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, function(match, p1, p2) {
-		let css = (p1.match(/[A-Z]/) ? 'col-cap-' : 'col-') + p1;
-		return '<span class="' + css + '">' + p2 + '</span>';
-	}).replace(/\n/g, '<br>');
+	let msg = escapeHtml(obj.msg).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback).replace(/\n/g, '<br>');
 
 	return '<span class="timestamp">' + timestr + "</span> " + obj.from_user + ' <span class="msg-content">' + msg + '</span>';
+}
+
+function colorCallback(not_used, p1, p2) {
+	let css = (p1.match(/[A-Z]/) ? 'col-cap-' : 'col-') + p1;
+	return '<span class="' + css + '">' + p2 + '</span>';
 }
 
 function escapeHtml(str) {
 	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
