@@ -1,0 +1,1 @@
+var act=new Account();

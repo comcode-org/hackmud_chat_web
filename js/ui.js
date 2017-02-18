@@ -71,25 +71,8 @@ function replaceUI() {
 			channel_div.append(msg_list);
 
 			let list = new MessageList(user.channels[chan], msg_list);
+			user.channels[chan].list = list;
 
-			// TODO clean this up to not leak like hell
-			setInterval(function() {
-				list.poll().then(function(msgs) {
-					let at_bottom = msg_list[0].scrollHeight - msg_list.scrollTop() == msg_list.height();
-
-					msgs.forEach(m => {
-						classList = ['message'];
-						if (settings.ignore_list.includes(m.from_user)) {
-							classList.push('ignore');
-						}
-						list.write(formatMessage(m), classList);
-					});
-
-					if (at_bottom) {
-						list.scrollToBottom();
-					}
-				});
-			}, 1000)
 
 			let form = $('<form action="">');
 			let input = $('<input type="text" class="chat-input">');
@@ -117,6 +100,23 @@ function replaceUI() {
 
 	$('.channel_area').hide();
 	$('.user_area').hide();
+
+	if (!act.poll_interval) {
+		act.poll_interval = setInterval(function() {
+			act.poll().then(function(data) {
+				for (user in data.chats) {
+					let channels = act.users[user].channels;
+
+					// new messages, in oldest-to-newest order
+					recent = data.chats[user].filter(m => !channels[m.channel].list.messages[m.id]);
+
+					recent.forEach(function(msg) {
+						channels[msg.channel].list.recordMessage(msg);
+					});
+				}
+			});
+		}, 1000);
+	}
 }
 
 function formatMessage(obj) {

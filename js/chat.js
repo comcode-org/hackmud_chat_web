@@ -1,12 +1,12 @@
 var request;
 
 if(typeof window!="undefined") {
-	// browser
+	// super quick and dirty browser wrapper
 	request=function(ops,cb) {
 		var x=new XMLHttpRequest();
 		x.onreadystatechange=function() {
 			if(x.readyState !== XMLHttpRequest.DONE)return;
-			cb(null,{statusCode:x.status},JSON.parse(x.responseText));
+			cb(null,{statusCode:x.status},x.responseText?JSON.parse(x.responseText):[]);
 		}
 
 		x.open(ops.method,ops.uri);
@@ -16,132 +16,110 @@ if(typeof window!="undefined") {
 	}
 }
 else {
-	// node
+	// Simple, straight forward node
 	request=require('request');
 }
-
-
-
-
 
 
 var API= {
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
-			request({ method: 'POST', uri: 'https://www.hackmud.com/mobile/'+endpoint+'.json', json:dat},
+			request({ method: 'POST', uri: 'https://hackmud.com/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
 					if(!error && response.statusCode == 200)
 						resolve(body)
-					else
+					else {
 						reject({error:error,statusCode:response?response.statusCode:null,body:body})
+					}
 				}
 			)
 		})
 	},
 
 	// core API
-	get_token:  (pass)                         => API.__promise_wrap('get_token',  {pass:pass}),
-	usernames:  (token)                        => API.__promise_wrap('usernames',  {chat_token:token}),
-	channels:   (token,user_id)                => API.__promise_wrap('channels',   {chat_token:token, user_id:user_id}),
-	chats:      (token,user_id,channel_id)     => API.__promise_wrap('chats',      {chat_token:token, user_id:user_id, channel_id:channel_id}),
-	create_chat:(token,user_id,channel_id,msg) => API.__promise_wrap('create_chat',{chat_token:token, user_id:user_id, channel_id:channel_id, msg:msg}),
+	get_token:   (pass)                       => API.__promise_wrap('get_token',   {pass:pass}),
+	account_data:(token)                      => API.__promise_wrap('account_data',{chat_token:token}),
+	chats:       (token,usernames,ext={})     => API.__promise_wrap('chats',       Object.assign(ext,{chat_token:token, usernames:usernames})),
+	send:        (token,username,channel,msg) => API.__promise_wrap('create_chat', {chat_token:token, username:username, channel:channel, msg:msg}),
+	tell:        (token,username,user,msg)    => API.__promise_wrap('create_chat', {chat_token:token, username:username, tell:user, msg:msg}),
 }
-
-
-
-
-function Channel(user,name,id) {
+//------------------------------------------------------------------------------
+function Channel(user,name) {
 	this.user=user;
 	this.name=name;
-	this.id=id;
-}
-Channel.prototype.poll=function() {
-	return API.chats(this.user.account.token,this.user.id,this.id);
 }
 Channel.prototype.send=function(msg) {
-	return API.create_chat(this.user.account.token,this.user.id,this.id,msg);
+	return API.send(this.user.account.token,this.user.name,this.name,msg);
 }
 Channel.prototype.print=function() {
 	console.log('        Channel:');
 	console.log('          name : '+this.name)
-	console.log('          id   : '+this.id)
 }
-
-
-function User(account,name,id) {
+//------------------------------------------------------------------------------
+function User(account,name,dat) {
 	this.account=account;
 	this.name=name;
-	this.id=id;
-	this.channels=null;
-}
-User.prototype.poll=function() {
-	var ar=[];
-	var names=[];
-	for(var i in this.channels) {
-		names.push(this.channels[i].name);
-		ar.push(this.channels[i].poll());
+	this.channels={}
+	for(var i=0;i<dat.length;++i) {
+		this.channels[dat[i]]=new Channel(this,dat[i]);
 	}
-	return Promise.all(ar).then(ar=>{
-		var ret={};
-		for(var i=0;i<ar.length;++i)
-			ret[names[i]]=ar[i]
-		return ret;
-	});
 }
-User.prototype.getChannels=function() {
-	return API.channels(this.account.token,this.id).then(channels=>{
-		this.channels={};
-		for(var i=0;i<channels.length;++i) {
-			var name=channels[i].name;
-			var id=channels[i].id;
-			this.channels[name]=new Channel(this,name,id);
-		}
-		return this;
-	})
+User.prototype.tell=function(to,msg) {
+	return API.tell(this.account.token,this.name,to,msg);
 }
 User.prototype.print=function() {
 	console.log('    User:');
 	console.log('      name : '+this.name)
-	console.log('      id   : '+this.id)
 	console.log('      channels:')
 	for(var i in this.channels)
 		this.channels[i].print();
 }
-
-
-function Account() {
+//------------------------------------------------------------------------------
+function Account(last=null) {
 	this.users=null;
 	this.token=null;
+	this.last=last
 }
 Account.prototype.login=function(pass) {
+	if(pass.length>10)return this.update(pass)
 	return API.get_token(pass).then(token=>this.update(token.chat_token))
+
 }
 Account.prototype.update=function(token) {
 	this.token=token;
-	return API.usernames(this.token).then(usernames=>{
+	return API.account_data(this.token).then(dat=>{
+		if(!dat.ok)return false;
 		this.users={};
 		var channels=[];
-		for(var i=0;i<usernames.length;++i) {
-			var name=usernames[i].name;
-			var id=usernames[i].id;
-			this.users[name]=new User(this,name,id);
-			channels.push(this.users[name].getChannels());
+		for(var i in dat.users) {
+			var name=i
+			this.users[name]=new User(this,name,dat.users[i]);
 		}
-		return Promise.all(channels).then(_=>this);
+		return this;
 	})
 }
-Account.prototype.poll=function() {
+Account.prototype.poll=function(ext={}) {
 	var ar=[];
 	var names=[];
-	for(var i in this.users) {
-		names.push(this.users[i].name);
-		ar.push(this.users[i].poll());
+	if(this.last) {
+		if(ext.before=='last')
+			ext.before=this.last+0.001;
+		if(ext.after=='last')
+			ext.after=this.last-0.001;
 	}
-	return Promise.all(ar).then(ar=>{
-		var ret={};
-		for(var i=0;i<ar.length;++i)
-			ret[names[i]]=ar[i]
-		return ret;
+	return API.chats(this.token,Object.keys(this.users),ext)
+	.then(o=>{
+		if(!o.ok)return o;
+		var last=0;
+		for(var i in o.chats) {
+			o.chats[i].sort((a,b)=>a.t-b.t);
+			var l=o.chats[i];
+			if(l.length && l[l.length-1].t>last)
+				last=l[l.length-1].t;
+		}
+		if(last)
+			this.last=last
+		return o;
 	});
 }
 Account.prototype.print=function() {
@@ -152,7 +130,9 @@ Account.prototype.print=function() {
 		this.users[i].print();
 }
 
-
-
-
-var act=new Account();
+if(typeof exports!="undefined") {
+	exports.API=API;
+	exports.Account=Account;
+	exports.User=User;
+	exports.Channel=Channel
+}
