@@ -7,17 +7,29 @@ function MessageList(channel, ul) {
 
 MessageList.prototype.poll = function() {
 	return this.channel.poll().then(messages => {
-		// new messages, in oldest-to-newest order
-		recent = messages.filter(m => !this.messages[m.id]).reverse();
-
-		recent.forEach(m => {
-			id = m.id;
-			this.messages[id] = m;
-			this.ids.push(id);
-		});
-
-		return recent;
 	});
+}
+
+MessageList.prototype.recordMessage = function (msg) {
+	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
+
+	let msgs = Array.isArray(msg) ? msg : [msg];
+
+	msgs.forEach(m => {
+		id = m.id;
+		this.messages[id] = m;
+		this.ids.push(id);
+
+		classList = ['message'];
+		if (settings.ignore_list.includes(m.from_user)) {
+			classList.push('ignore');
+		}
+		this.write(formatMessage(m), classList);
+	});
+
+	if (at_bottom) {
+		this.scrollToBottom();
+	}
 }
 
 MessageList.prototype.write = function(html, classArray) {
