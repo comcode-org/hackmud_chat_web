@@ -108,7 +108,8 @@ function replaceUI() {
 					let channels = act.users[user].channels;
 
 					// new messages, in oldest-to-newest order
-					recent = data.chats[user].filter(m => !channels[m.channel].list.messages[m.id]);
+					// TODO deal with tells
+					recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
 
 					recent.forEach(function(msg) {
 						channels[msg.channel].list.recordMessage(msg);
