@@ -5,6 +5,10 @@
 	line-height: 0.9em;
 }
 
+.message_list li {
+	margin: 0.5em 0;
+}
+
 .chat-input {
 	width: 90%;
 }
