@@ -1,6 +1,12 @@
 .message_list {
 	overflow-y: scroll;
 	max-height: 50%;
+	white-space: pre-wrap;
+	line-height: 0.9em;
+}
+
+.message_list li {
+	margin: 0.5em 0;
 }
 
 .chat-input {
