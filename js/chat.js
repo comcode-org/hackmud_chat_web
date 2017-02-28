@@ -44,9 +44,10 @@ var API= {
 	tell:        (token,username,user,msg)    => API.__promise_wrap('create_chat', {chat_token:token, username:username, tell:user, msg:msg}),
 }
 //------------------------------------------------------------------------------
-function Channel(user,name) {
+function Channel(user,name,users) {
 	this.user=user;
 	this.name=name;
+	this.users=users;
 }
 Channel.prototype.send=function(msg) {
 	return API.send(this.user.account.token,this.user.name,this.name,msg);
@@ -60,8 +61,8 @@ function User(account,name,dat) {
 	this.account=account;
 	this.name=name;
 	this.channels={}
-	for(var i=0;i<dat.length;++i) {
-		this.channels[dat[i]]=new Channel(this,dat[i]);
+	for(var i in dat) {
+		this.channels[i]=new Channel(this,i,dat[i]);
 	}
 }
 User.prototype.tell=function(to,msg) {
