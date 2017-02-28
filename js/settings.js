@@ -12,9 +12,7 @@ Settings.prototype.addIgnore = function(user) {
 	localStorage.setItem('ignore_list', JSON.stringify(this.ignore_list));
 }
 
-var settings = new Settings();
-
-$(document).ready(function() {
+Settings.prototype.ready = function() {
 	[
 		'color_code',
 		'ignore_list',
@@ -24,4 +22,7 @@ $(document).ready(function() {
 			settings[key] = JSON.parse(data);
 		}
 	});
-});
+}
+
+var settings = new Settings();
+

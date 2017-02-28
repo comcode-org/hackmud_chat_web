@@ -1,9 +1,9 @@
-$(document).ready(function() {
+function ui_ready() {
 	var token = getToken();
 	if (token) {
 		act.update(token).then(replaceUI);
 	}
-})
+}
 
 function login(pass) {
 	act.login(pass).then(function() {
