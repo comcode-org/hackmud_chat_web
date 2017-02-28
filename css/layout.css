@@ -27,7 +27,13 @@ ul.tab-list li {
 	padding: 5px;
 	margin: 0px 10px;
 	cursor: pointer;
+	border: 1px solid white;
 }
+
+ul.tab-list li.active {
+	border: 1px solid yellow;
+}
+
 
 ul.tab-list li:hover {
 	color: #fff;
