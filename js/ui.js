@@ -105,7 +105,7 @@ function replaceUI() {
 
 	if (!act.poll_interval) {
 		act.poll_interval = setInterval(function() {
-			act.poll().then(function(data) {
+			act.poll({after:"last"}).then(function(data) {
 				for (user in data.chats) {
 					let channels = act.users[user].channels;
 
