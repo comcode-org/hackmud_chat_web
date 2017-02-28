@@ -22,9 +22,10 @@ else {
 
 
 var API= {
+	domain_root: "www.hackmud.com",
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
-			request({ method: 'POST', uri: 'https://www.hackmud.com/mobile/'+endpoint+'.json', json:dat},
+			request({ method: 'POST', uri: 'https://'+API.domain_root+'/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
 					if(!error && response.statusCode == 200)
 						resolve(body)
