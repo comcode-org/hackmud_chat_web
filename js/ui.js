@@ -25,6 +25,8 @@ function readCookieValue(key) {
 }
 
 function replaceUI() {
+	$('#chat_pass_login').hide();
+
 	main_div = $("#chat_area");
 
 	main_div.innerHTML = ''

@@ -1,6 +1,6 @@
 .message_list {
 	overflow-y: scroll;
-	max-height: 50%;
+	max-height: 100%;
 	white-space: pre-wrap;
 	line-height: 0.9em;
 }
@@ -10,12 +10,11 @@
 }
 
 .chat-input {
-	width: 90%;
+	width: 100%;
 }
 
-/* I have no idea if this is the best way to handle the issues with float:left in navbars, or if 30px is a good value */
 .tabset {
-	min-height: 30px;
+	height: 2rem
 }
 
 ul.tab-list {
@@ -27,4 +26,26 @@ ul.tab-list li {
 	float: left;
 	padding: 5px;
 	margin: 0px 10px;
+	cursor: pointer;
+}
+
+ul.tab-list li:hover {
+	color: #fff;
+}
+
+#chat_area {
+	display: block;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 1rem;
+	right: 1rem;
+}
+
+#chat_area .channel_area {
+    position: absolute;
+    bottom: 4rem;
+    top: 4rem;
+    right: 0;
+    left: 0;
 }
