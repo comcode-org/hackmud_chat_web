@@ -33,10 +33,34 @@ ul.tab-list li:hover {
 	color: #fff;
 }
 
+#chat_beta_header {
+	color: #555;
+	position: fixed;
+	left: 0.5rem;
+	top: 0.2rem;
+	right: 0.5rem;
+	font-size: 1rem;
+}
+
+#chat_beta_header div {
+	position: absolute;
+}
+
+#chat_beta_header .title {
+	left: 0;
+}
+#chat_beta_header .contribute {
+	right: 0;
+}
+#chat_beta_header .contribute a {
+	text-decoration: underline;
+	color: #555;
+}
+
 #chat_area {
 	display: block;
 	position: fixed;
-	top: 0;
+	top: 2rem;
 	bottom: 0;
 	left: 1rem;
 	right: 1rem;
