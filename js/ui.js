@@ -39,7 +39,7 @@ function replaceUI() {
 	for (let name in act.users) {
 		user = act.users[name];
 
-		let li = $("<li>");
+		let li = $('<li class="user_tab">');
 		li.text(name);
 		user_ul.append(li);
 
@@ -47,6 +47,9 @@ function replaceUI() {
 		main_div.append(user_div);
 
 		li.click(function() {
+			$('.user_tab').removeClass('active');
+			li.addClass('active');
+
 			$('.user_area').hide();
 			user_div.show();
 		});
@@ -57,7 +60,7 @@ function replaceUI() {
 		user_div.append(tabset);
 
 		for (let chan in user.channels) {
-			let li = $('<li>');
+			let li = $('<li class="channel_tab">');
 			li.text(chan);
 			chan_ul.append(li);
 
@@ -65,6 +68,9 @@ function replaceUI() {
 			let channel_div = $('<div class="channel_area">');
 			user_div.append(channel_div);
 			li.click(function() {
+				$('.channel_tab').removeClass('active');
+				li.addClass('active');
+
 				$('.channel_area').hide();
 				channel_div.show();
 			});

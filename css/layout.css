@@ -27,7 +27,13 @@ ul.tab-list li {
 	padding: 5px;
 	margin: 0px 10px;
 	cursor: pointer;
+	border: 1px solid white;
 }
+
+ul.tab-list li.active {
+	border: 1px solid yellow;
+}
+
 
 ul.tab-list li:hover {
 	color: #fff;
@@ -67,6 +73,7 @@ ul.tab-list li:hover {
 }
 
 #chat_area .channel_area {
+    z-index: -1; /* for some reason, the .channel_area was overlapping and interfering with channel tabs. Now it just overlaps. */
     position: absolute;
     bottom: 4rem;
     top: 4rem;
