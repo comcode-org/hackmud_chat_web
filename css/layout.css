@@ -48,6 +48,13 @@ ul.tab-list li:hover {
 	font-size: 1rem;
 }
 
+#chat_pass_login {
+    position: fixed;
+    z-index: 1;
+	left: 1rem;
+	top: 3rem;
+}
+
 #chat_beta_header div {
 	position: absolute;
 }
