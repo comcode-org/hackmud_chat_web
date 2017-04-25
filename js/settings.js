@@ -3,8 +3,14 @@ function Settings() {
 };
 
 Settings.prototype.setColor = function(code) {
-	this.color_code = code;
-	localStorage.setItem('color_code', JSON.stringify(code));
+	
+	if(code == "none") {
+		this.color_code = null;
+		localStorage.removeItem('color_code');
+	} else {
+		this.color_code = code;
+		localStorage.setItem('color_code', JSON.stringify(code));	
+	}
 }
 
 Settings.prototype.addIgnore = function(user) {
