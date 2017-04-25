@@ -132,7 +132,7 @@ function colorizeUser(user) {
 	let valid_colors = "BEFGHIJLMNQSUVWY";
 	let num_colors = valid_colors.length;
 
-	let hash = user.split("").map(e => e.charCodeAt(0)).reduce((e, a) => a+e, 0);
+	let hash = user.split("").map(e => e.charCodeAt(0)).reduce((a, e) => a+e, 0);
 	let colorCode = valid_colors.charAt((user.length + hash) % num_colors);
 	let colorized = '`' + colorCode + user + "`";
 
