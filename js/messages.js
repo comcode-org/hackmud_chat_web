@@ -51,7 +51,7 @@ MessageList.prototype.handleSlashCommand = function(str) {
 	var components = str.split(' ');
 
 	if (components[0] == 'help') {
-		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code>');
+		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>');
 	} else if (components[0] == 'ignore') {
 		if (components[1]) {
 			var user = components[1];
@@ -68,7 +68,7 @@ MessageList.prototype.handleSlashCommand = function(str) {
 		} else {
 			if (settings.color_code) {
 				var color = settings.color_code;
-				this.write('Current chat color is "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
+				this.write('Current chat color is "' + color + '". Use "/color none" to unset. Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
 			} else {
 				this.safeWrite("Currently using the default chat color.");
 			}
