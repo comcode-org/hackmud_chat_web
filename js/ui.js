@@ -67,19 +67,22 @@ function replaceUI() {
 
 			let channel_div = $('<div class="channel_area">');
 			user_div.append(channel_div);
-			li.click(function() {
-				$('.channel_tab').removeClass('active');
-				li.addClass('active');
-
-				$('.channel_area').hide();
-				channel_div.show();
-			});
 
 			let msg_list = $('<ul class="message_list">');
 			channel_div.append(msg_list);
 
 			let list = new MessageList(user.channels[chan], msg_list);
 			user.channels[chan].list = list;
+
+			li.click(function() {
+				$('.channel_tab').removeClass('active');
+				li.addClass('active');
+
+				$('.channel_area').hide();
+				channel_div.show();
+				
+				list.scrollToBottom();
+			});
 
 
 			let form = $('<form action="">');
@@ -93,7 +96,7 @@ function replaceUI() {
 						if (settings.color_code) {
 							msg = '`' + settings.color_code + msg + '`';
 						}
-						list.channel.send(msg);
+						list.send(msg);
 					}
 					input.val('');
 				} catch (e) {
@@ -101,6 +104,16 @@ function replaceUI() {
 				}
 				return false;
 			})
+
+			input.keydown(function(e) {
+				let keycode = e.which;
+
+				if(keycode == 34) { // PgDn
+					list.pgDn();
+				} else if(keycode == 33) { // PgUp
+					list.pgUp();
+				}
+			});
 			form.append(input);
 			channel_div.append(form);
 		}

@@ -10,6 +10,11 @@ MessageList.prototype.poll = function() {
 	});
 }
 
+MessageList.prototype.send = function(msg) {
+	this.scrollToBottom();
+	return this.channel.send(msg);
+}
+
 MessageList.prototype.recordMessage = function (msg) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
 
@@ -74,8 +79,22 @@ MessageList.prototype.handleSlashCommand = function(str) {
 			}
 		}
 	}
-	
+
 	this.scrollToBottom();
+}
+
+MessageList.prototype.pgUp = function() {
+	let height = this.ul.height();
+	let currTop = this.ul.scrollTop();
+
+	this.ul.scrollTop(currTop - height);
+}
+
+MessageList.prototype.pgDn = function() {
+	let height = this.ul.height();
+	let currTop = this.ul.scrollTop();
+
+	this.ul.scrollTop(currTop + height);
 }
 
 MessageList.prototype.scrollToBottom = function() {
