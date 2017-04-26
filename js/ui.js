@@ -142,26 +142,139 @@ function replaceUI() {
 }
 
 function colorizeUser(user) {
-	let valid_colors = "BEFGHIJLMNQSUVWY";
+	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
 	let hash = user.split("").map(e => e.charCodeAt(0)).reduce((a, e) => a+e, 0);
 	let colorCode = valid_colors.charAt((user.length + hash) % num_colors);
 	let colorized = '`' + colorCode + user + "`";
 
-	return replaceColorCodes(colorized);
+	return colorized;
+}
+
+function colorizeMessage(msg) {
+	let runs = [];
+
+	// Iterate backwards until we find the most recent unclosed run, then close it. 
+	// Once we close this run, continue iterating backwards until we find the last still-open run to resume coloring from
+	function closeLastCode(runs, x) {
+		let closedRun = null;
+		for(let y = runs.length-1; y >= 0; y--) {
+			let run = runs[y];
+			if(run.close == null) {
+				if(closedRun == null) {
+					run.close = x;
+					closedRun = run;	
+				} else {
+					closedRun.resumeColor = run.color;
+					break;
+				}
+			}
+		}
+	}
+
+	let currentColor = null;
+	// Iterate each character
+	for(let x = 0; x < msg.length; x++) {
+		let char = msg.charAt(x);
+		if(char == '`') { // For each color code, look ahead a single step
+			if(x + 1 < msg.length) {
+				let next = msg.charAt(x+1);
+				if(next.match(/[A-Za-z0-5]/)) { // If the next character is a coloring code, this is an "open" code
+					runs.push({color: next, open: x});
+					currentColor = next;
+				} else { // Otherwise it's a close code, but we need to iterate backwards to find the correct "depth" to close
+					closeLastCode(runs, x);
+				}
+			} else {
+				closeLastCode(runs, x);
+			}
+		}
+	}
+
+
+	// Iterate the runs to replace nested opening colors with terminate/open
+	for(let x = 0; x < runs.length; x++) {
+		let run = runs[x];
+		if(run.resumeColor == null) {
+			continue;
+		}
+
+		if(x - 1 >= 0) {
+			if(runs[x-1].close - run.open <= 1) {
+				continue;
+			}
+		} else {
+			continue;
+		}
+		let pre = msg.slice(0, run.open + 1);
+		let post = msg.slice(run.open + 1);
+		msg = pre + '`' + post;
+
+		runs.forEach(r => {
+			if(r.close >= run.open + 1) {
+				r.close++;
+			}
+
+			if(r.open >= run.open + 1) {
+				r.open++;
+			}
+		});
+	}
+
+	// Iterate the runs to replace nested close colors with terminate/re-open last
+	for(let x = 0; x < runs.length; x++) {
+		let run = runs[x];
+		if(run.resumeColor == null) {
+			continue;
+		}
+
+		if(x + 1 < runs.length) {
+			if(runs[x+1].open - run.close <= 1) {
+				continue;
+			}
+		} else {
+			continue;
+		}
+
+		let pre = msg.slice(0, run.close + 1);
+		let post = msg.slice(run.close + 1);
+		msg = pre + '`' + run.resumeColor + post;
+
+		runs.forEach(r => {
+			if(r.close >= run.open + 1) {
+				r.close += 2;
+			}
+
+			if(r.open >= run.open + 1) {
+				r.open += 2;
+			}
+		});
+	}
+
+	return msg.replace(/`+$/, '`');
+}
+
+function colorizeMentions(msg) {
+	return msg.replace(/(^|\W)@(\w+)(\W|$)/g, function(match, startPad, name, endPad) {
+		return startPad + '`C@`' + colorizeUser(name) + endPad;
+	});
 }
 
 function replaceColorCodes(string) {
-	return escapeHtml(string).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
+	return string.replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
 }
 
 function formatMessage(obj) {
 	let date = new Date(obj.t * 1000);
 	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
-	let msg = replaceColorCodes(obj.msg).replace(/\n/g, '<br>');
+	let msg = escapeHtml(obj.msg);
+	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
+	msg = colorizeMentions(msg);
+	msg = colorizeMessage(msg);
+	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
-	return '<span class="timestamp">' + timestr + "</span> " + colorizeUser(obj.from_user) + ' <span class="msg-content">' + msg + '</span>';
+	return '<span class="timestamp">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
 }
 
 function colorCallback(not_used, p1, p2) {
