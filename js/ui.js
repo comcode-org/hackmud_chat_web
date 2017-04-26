@@ -142,26 +142,35 @@ function replaceUI() {
 }
 
 function colorizeUser(user) {
-	let valid_colors = "BEFGHIJLMNQSUVWY";
+	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
 	let hash = user.split("").map(e => e.charCodeAt(0)).reduce((a, e) => a+e, 0);
 	let colorCode = valid_colors.charAt((user.length + hash) % num_colors);
 	let colorized = '`' + colorCode + user + "`";
 
-	return replaceColorCodes(colorized);
+	return colorized;
+}
+
+function colorizeMentions(msg) {
+	return msg.replace(/@(\w+)(\W|$)/g, function(match, name, endPad) {
+		return replaceColorCodes('`C@`' + colorizeUser(name) + endPad);
+	});
 }
 
 function replaceColorCodes(string) {
-	return escapeHtml(string).replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
+	return string.replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
 }
 
 function formatMessage(obj) {
 	let date = new Date(obj.t * 1000);
 	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
-	let msg = replaceColorCodes(obj.msg).replace(/\n/g, '<br>');
+	let msg = escapeHtml(obj.msg);
+	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
+	msg = colorizeMentions(msg);
+	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
-	return '<span class="timestamp">' + timestr + "</span> " + colorizeUser(obj.from_user) + ' <span class="msg-content">' + msg + '</span>';
+	return '<span class="timestamp">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
 }
 
 function colorCallback(not_used, p1, p2) {
