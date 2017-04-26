@@ -101,6 +101,16 @@ function replaceUI() {
 				}
 				return false;
 			})
+
+			input.keydown(function(e) {
+				let keycode = e.which;
+
+				if(keycode == 34) { // PgDn
+					list.pgDn();
+				} else if(keycode == 33) { // PgUp
+					list.pgUp();
+				}
+			});
 			form.append(input);
 			channel_div.append(form);
 		}

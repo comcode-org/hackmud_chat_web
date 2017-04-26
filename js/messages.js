@@ -78,6 +78,20 @@ MessageList.prototype.handleSlashCommand = function(str) {
 	this.scrollToBottom();
 }
 
+MessageList.prototype.pgUp = function() {
+	let height = this.ul.height();
+	let currTop = this.ul.scrollTop();
+
+	this.ul.scrollTop(currTop - height);
+}
+
+MessageList.prototype.pgDn = function() {
+	let height = this.ul.height();
+	let currTop = this.ul.scrollTop();
+
+	this.ul.scrollTop(currTop + height);
+}
+
 MessageList.prototype.scrollToBottom = function() {
 	this.ul.scrollTop(1e10); // just scroll down a lot
 }
