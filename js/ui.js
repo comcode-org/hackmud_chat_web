@@ -139,7 +139,7 @@ function replaceUI() {
 }
 
 function colorizeUser(user) {
-	let valid_colors = "BEFGHIJLMNQSUVWY";
+	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
 	let hash = user.split("").map(e => e.charCodeAt(0)).reduce((a, e) => a+e, 0);
