@@ -153,6 +153,7 @@ function colorizeUser(user) {
 }
 
 function colorizeMessage(msg) {
+	let original = msg;
 	let runs = [];
 
 	// Iterate backwards until we find the most recent unclosed run, then close it. 
@@ -233,8 +234,6 @@ function colorizeMessage(msg) {
 			if(runs[x+1].open - run.close <= 1) {
 				continue;
 			}
-		} else {
-			continue;
 		}
 
 		let pre = msg.slice(0, run.close + 1);
@@ -251,6 +250,8 @@ function colorizeMessage(msg) {
 			}
 		});
 	}
+
+	console.log(`original msg: ${original}\nmodified msg: ${msg}, \ntree:\n${JSON.stringify(runs, null, 2)}`);
 
 	return msg.replace(/`+$/, '`');
 }
