@@ -10,6 +10,11 @@ MessageList.prototype.poll = function() {
 	});
 }
 
+MessageList.prototype.send = function(msg) {
+	this.scrollToBottom();
+	return this.channel.send(msg);
+}
+
 MessageList.prototype.recordMessage = function (msg) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
 
@@ -74,7 +79,7 @@ MessageList.prototype.handleSlashCommand = function(str) {
 			}
 		}
 	}
-	
+
 	this.scrollToBottom();
 }
 
