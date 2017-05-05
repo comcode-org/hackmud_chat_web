@@ -90,6 +90,11 @@ function replaceUI() {
 			form.submit(function() {
 				try {
 					let msg = input.val();
+					
+					if(msg.trim().length == 0) {
+						return false;
+					}
+
 					if (msg[0] == '/') {
 						list.handleSlashCommand(msg.slice(1));
 					} else {
