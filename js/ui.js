@@ -26,20 +26,28 @@ function readCookieValue(key) {
 
 
 
-function setupChannel(chan_ul,user_div,chan) {
+function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	let li = $('<li class="channel_tab">');
-	li.text(chan);
+	if(tell) {
+		li.append($('<span class="col-C">@</span>'));
+	}
+	else {
+		li.append($('<span class="col-C">#</span>'));
+	}
+	li.append(chan);
 	chan_ul.append(li);
 
 
 	let channel_div = $('<div class="channel_area">');
+	channel_div.hide();
 	user_div.append(channel_div);
 
 	let msg_list = $('<ul class="message_list">');
 	channel_div.append(msg_list);
 
-	let list = new MessageList(user.channels[chan], msg_list);
-	user.channels[chan].list = list;
+	let list = new MessageList((tell?user.tells:user.channels)[chan], msg_list);
+
+	(tell?user.tells:user.channels)[chan].list = list;
 
 	li.click(function() {
 		$('.channel_tab').removeClass('active');
@@ -54,6 +62,8 @@ function setupChannel(chan_ul,user_div,chan) {
 
 	let form = $('<form action="">');
 	let input = $('<input type="text" class="chat-input">');
+	let ch=chan;
+	let u=user;
 	form.submit(function() {
 		try {
 			let msg = input.val();
@@ -68,7 +78,10 @@ function setupChannel(chan_ul,user_div,chan) {
 				if (settings.color_code) {
 					msg = '`' + settings.color_code + msg + '`';
 				}
-				list.send(msg);
+				if(tell)
+					list.tell(u,ch,msg)
+				else
+					list.send(msg);
 			}
 			input.val('');
 		} catch (e) {
@@ -104,6 +117,7 @@ function replaceUI() {
 
 	for (let name in act.users) {
 		user = act.users[name];
+		if(!user.tells)user.tells={}
 
 		let li = $('<li class="user_tab">');
 		li.text(name);
@@ -122,11 +136,18 @@ function replaceUI() {
 
 		let chan_ul = $('<ul class="tab-list">');
 		let tabset = $('<div class="tabset">');
+
 		tabset.append(chan_ul);
 		user_div.append(tabset);
 
+		user.chan_ul=chan_ul;
+		user.user_div=user_div
 		for (let chan in user.channels) {
-			setupChannel(chan_ul,user_div,chan);
+			setupChannel(user,chan_ul,user_div,chan);
+		}
+
+		for (let tell in user.tells) {
+			setupChannel(user,chan_ul,user_div,tells,true);
 		}
 	}
 
@@ -138,13 +159,21 @@ function replaceUI() {
 			act.poll({after:"last"}).then(function(data) {
 				for (user in data.chats) {
 					let channels = act.users[user].channels;
+					let tells = act.users[user].tells;
 
 					// new messages, in oldest-to-newest order
 					// TODO deal with tells
 					recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
 
+					data.chats[user].filter(m => !m.channel).map(m=> m.from_user==user?m.to_user:m.from_user).forEach(m=>{if(!tells[m]){tells[m]={};setupChannel(act.users[user],act.users[user].chan_ul,act.users[user].user_div,m,true);}});
+					recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
+					console.log(recent_tells.length);
+
 					recent.forEach(function(msg) {
 						channels[msg.channel].list.recordMessage(msg);
+					});
+					recent_tells.forEach(function(msg) {
+						tells[msg.from_user==user?msg.to_user:msg.from_user].list.recordMessage(msg);
 					});
 				}
 			});

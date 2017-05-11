@@ -15,6 +15,11 @@ MessageList.prototype.send = function(msg) {
 	return this.channel.send(msg);
 }
 
+MessageList.prototype.tell = function(user,to_user,msg) {
+	this.scrollToBottom();
+	return user.tell(to_user,msg);
+}
+
 MessageList.prototype.recordMessage = function (msg) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
 
