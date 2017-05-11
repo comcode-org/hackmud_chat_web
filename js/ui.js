@@ -24,6 +24,72 @@ function readCookieValue(key) {
 	return document.cookie.replace(new RegExp('(?:(?:^|.*;\\s*)' + key + '\\s*\\=\\s*([^;]*).*$)|^.*$'), "$1");
 }
 
+
+
+function setupChannel(chan_ul,user_div,chan) {
+	let li = $('<li class="channel_tab">');
+	li.text(chan);
+	chan_ul.append(li);
+
+
+	let channel_div = $('<div class="channel_area">');
+	user_div.append(channel_div);
+
+	let msg_list = $('<ul class="message_list">');
+	channel_div.append(msg_list);
+
+	let list = new MessageList(user.channels[chan], msg_list);
+	user.channels[chan].list = list;
+
+	li.click(function() {
+		$('.channel_tab').removeClass('active');
+		li.addClass('active');
+
+		$('.channel_area').hide();
+		channel_div.show();
+		
+		list.scrollToBottom();
+	});
+
+
+	let form = $('<form action="">');
+	let input = $('<input type="text" class="chat-input">');
+	form.submit(function() {
+		try {
+			let msg = input.val();
+			
+			if(msg.trim().length == 0) {
+				return false;
+			}
+
+			if (msg[0] == '/') {
+				list.handleSlashCommand(msg.slice(1));
+			} else {
+				if (settings.color_code) {
+					msg = '`' + settings.color_code + msg + '`';
+				}
+				list.send(msg);
+			}
+			input.val('');
+		} catch (e) {
+			console.error(e);
+		}
+		return false;
+	})
+
+	input.keydown(function(e) {
+		let keycode = e.which;
+
+		if(keycode == 34) { // PgDn
+			list.pgDn();
+		} else if(keycode == 33) { // PgUp
+			list.pgUp();
+		}
+	});
+	form.append(input);
+	channel_div.append(form);
+}
+
 function replaceUI() {
 	$('#chat_pass_login').hide();
 
@@ -60,67 +126,7 @@ function replaceUI() {
 		user_div.append(tabset);
 
 		for (let chan in user.channels) {
-			let li = $('<li class="channel_tab">');
-			li.text(chan);
-			chan_ul.append(li);
-
-
-			let channel_div = $('<div class="channel_area">');
-			user_div.append(channel_div);
-
-			let msg_list = $('<ul class="message_list">');
-			channel_div.append(msg_list);
-
-			let list = new MessageList(user.channels[chan], msg_list);
-			user.channels[chan].list = list;
-
-			li.click(function() {
-				$('.channel_tab').removeClass('active');
-				li.addClass('active');
-
-				$('.channel_area').hide();
-				channel_div.show();
-				
-				list.scrollToBottom();
-			});
-
-
-			let form = $('<form action="">');
-			let input = $('<input type="text" class="chat-input">');
-			form.submit(function() {
-				try {
-					let msg = input.val();
-					
-					if(msg.trim().length == 0) {
-						return false;
-					}
-
-					if (msg[0] == '/') {
-						list.handleSlashCommand(msg.slice(1));
-					} else {
-						if (settings.color_code) {
-							msg = '`' + settings.color_code + msg + '`';
-						}
-						list.send(msg);
-					}
-					input.val('');
-				} catch (e) {
-					console.error(e);
-				}
-				return false;
-			})
-
-			input.keydown(function(e) {
-				let keycode = e.which;
-
-				if(keycode == 34) { // PgDn
-					list.pgDn();
-				} else if(keycode == 33) { // PgUp
-					list.pgUp();
-				}
-			});
-			form.append(input);
-			channel_div.append(form);
+			setupChannel(chan_ul,user_div,chan);
 		}
 	}
 
