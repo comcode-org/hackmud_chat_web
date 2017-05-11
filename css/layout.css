@@ -1,5 +1,5 @@
 .message_list {
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-height: 100%;
 	white-space: pre-wrap;
 	line-height: 0.9em;
@@ -13,25 +13,32 @@
 	width: 100%;
 }
 
-.tabset {
-	height: 2rem
-}
 
 ul.tab-list {
 	list-style: none;
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	overflow-y:auto;
+}
+.user_area ul.tab-list {
+	left:160px;
 }
 
 ul.tab-list li {
 	display: block;
-	float: left;
+	max-width:150px;
+	word-break:break-all;
 	padding: 5px;
-	margin: 0px 10px;
+	margin: 0px;
 	cursor: pointer;
 	border: 1px solid white;
 }
 
 ul.tab-list li.active {
 	border: 1px solid yellow;
+	background:rgba(255,255,0,.25)
 }
 
 
@@ -74,16 +81,14 @@ ul.tab-list li:hover {
 	display: block;
 	position: fixed;
 	top: 2rem;
-	bottom: 0;
+	bottom: 1rem;
 	left: 1rem;
 	right: 1rem;
 }
-
 #chat_area .channel_area {
-    z-index: -1; /* for some reason, the .channel_area was overlapping and interfering with channel tabs. Now it just overlaps. */
-    position: absolute;
-    bottom: 4rem;
-    top: 4rem;
-    right: 0;
-    left: 0;
+	position:absolute;
+	left:330px;
+	top:0;
+	bottom:4rem;
+	right:0;
 }
