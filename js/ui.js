@@ -45,7 +45,10 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	let msg_list = $('<ul class="message_list">');
 	channel_div.append(msg_list);
 
-	let list = new MessageList((tell?user.tells:user.channels)[chan], msg_list);
+	let list = new MessageList((tell?user.tells:user.channels)[chan], msg_list, user);
+
+	list.li=li; // hackity hack hack
+	list.channel_div=channel_div;
 
 	(tell?user.tells:user.channels)[chan].list = list;
 
