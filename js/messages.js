@@ -62,7 +62,7 @@ MessageList.prototype.handleSlashCommand = function(str) {
 	var components = str.split(' ');
 
 	if (components[0] == 'help') {
-		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>, /tell <user>');
+		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>, /tell <user> <optional message>');
 	} else if (components[0] == 'ignore') {
 		if (components[1]) {
 			var user = components[1];
@@ -99,6 +99,12 @@ MessageList.prototype.handleSlashCommand = function(str) {
 
 			this.user.tells[u].list.scrollToBottom();
 			$(this.user.tells[u].list.channel_div).find('input').focus()
+			if(components[2]) {
+				components.shift()
+				components.shift()
+				var m=components.join(' ');
+				this.user.tells[u].list.tell(this.user,u,m);
+			}
 		} else {
 			this.safeWrite("Please specify a user to open a conversation with");
 		}
