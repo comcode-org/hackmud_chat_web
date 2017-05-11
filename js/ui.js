@@ -167,7 +167,6 @@ function replaceUI() {
 
 					data.chats[user].filter(m => !m.channel).map(m=> m.from_user==user?m.to_user:m.from_user).forEach(m=>{if(!tells[m]){tells[m]={};setupChannel(act.users[user],act.users[user].chan_ul,act.users[user].user_div,m,true);}});
 					recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
-					console.log(recent_tells.length);
 
 					recent.forEach(function(msg) {
 						channels[msg.channel].list.recordMessage(msg);
