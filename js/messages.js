@@ -35,6 +35,8 @@ MessageList.prototype.recordMessage = function (msg) {
 		if (settings.ignore_list.includes(m.from_user)) {
 			classList.push('ignore');
 		}
+		if(m.msg.match(new RegExp('@'+this.user.name+'\\b')))
+			classList.push('mention');
 		this.write(formatMessage(m), classList);
 	});
 
