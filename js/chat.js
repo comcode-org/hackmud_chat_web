@@ -122,13 +122,15 @@ Account.prototype.poll=function(ext={}) {
 				.filter(m=>typeof m.channel!="undefined" && (m.is_join || m.is_leave))
 				.forEach(m=>{
 					var ch=this.users[i].channels[m.channel];
-					if(m.is_join)
-						 ch.users.push(m.from_user);
+					if(m.is_join) {
+						if(ch.users.indexOf(m.from_user)==-1)
+							ch.users.push(m.from_user);
+					}
 					if(m.is_leave) {
-						 var ind=ch.users.indexOf(m.from_user);
-						 for(var ind=ch.users.indexOf(m.from_user);ind!=-1;ind=ch.users.indexOf(m.from_user)) {
-							 ch.users.splice(ind,1);
-						 }
+						var ind=ch.users.indexOf(m.from_user);
+						for(var ind=ch.users.indexOf(m.from_user);ind!=-1;ind=ch.users.indexOf(m.from_user)) {
+							ch.users.splice(ind,1);
+						}
 					}
 				})
 		}
