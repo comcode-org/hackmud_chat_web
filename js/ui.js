@@ -24,8 +24,6 @@ function readCookieValue(key) {
 	return document.cookie.replace(new RegExp('(?:(?:^|.*;\\s*)' + key + '\\s*\\=\\s*([^;]*).*$)|^.*$'), "$1");
 }
 
-
-
 function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	let li = $('<li class="channel_tab">');
 	if(tell) {
@@ -59,7 +57,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 		$('.channel_area').hide();
 		channel_div.show();
-		
+
 		list.scrollToBottom();
 	});
 
@@ -78,7 +76,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	form.submit(function() {
 		try {
 			let msg = input.val();
-			
+
 			if(msg.trim().length == 0) {
 				return false;
 			}
@@ -209,6 +207,29 @@ function colorizeMentions(msg) {
 	});
 }
 
+function colorizeScripts(msg) {
+	let trustUsers = [
+		'accts',
+		'autos',
+		'chats',
+		'corps',
+		'escrow',
+		'gui',
+		'kernel',
+		'market',
+		'scripts',
+		'sys',
+		'trust',
+		'users'
+	];
+
+	return msg.replace(/([a-z_]\w*)\.([a-z_]\w*)/g, function(match, username, script) {
+		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
+
+		return replaceColorCodes('`' + colorCode + username + '`.`L' + script + '`');
+	});
+}
+
 function replaceColorCodes(string) {
 	return string.replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
 }
@@ -219,6 +240,7 @@ function formatMessage(obj) {
 	let msg = escapeHtml(obj.msg);
 	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
 	msg = colorizeMentions(msg);
+	msg = colorizeScripts(msg);
 	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
 	return '<span class="timestamp">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
@@ -232,4 +254,3 @@ function colorCallback(not_used, p1, p2) {
 function escapeHtml(str) {
 	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-
