@@ -93,9 +93,13 @@ MessageList.prototype.handleSlashCommand = function(str) {
 		}
 	} else if (components[0] == 'color') {
 		if (components[1]) {
-			var color = components[1];
-			settings.setColor(color);
-			this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
+			if (components[1].length == 1){
+				var color = components[1];
+				settings.setColor(color);
+				this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
+			} else {
+				this.write("Please specify a one-character color code.")
+			}
 		} else {
 			if (settings.color_code) {
 				var color = settings.color_code;
