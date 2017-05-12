@@ -94,6 +94,14 @@ ul.tab-list li:hover {
 	right:0;
 }
 
+.break {
+	word-break:normal;
+}
+pre.nobreak {
+	white-space:nowrap;
+	display:inline-block;
+}
+
 li[data-unread]::before {
 	content:"[" attr(data-unread) "]";
 	color:red;

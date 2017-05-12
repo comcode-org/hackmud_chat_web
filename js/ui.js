@@ -47,6 +47,9 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	list.li=li; // hackity hack hack
 	list.channel_div=channel_div;
+	if(tell) {
+		list.channel.users=[user.name,chan]
+	}
 
 	(tell?user.tells:user.channels)[chan].list = list;
 
