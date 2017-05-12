@@ -68,6 +68,11 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	let form = $('<form action="">');
 	let input = $('<input type="text" class="chat-input">');
+	if (!settings.skip_help)
+	{
+		input.attr("placeholder", "/help");
+	}
+
 	let ch=chan;
 	let u=user;
 	form.submit(function() {

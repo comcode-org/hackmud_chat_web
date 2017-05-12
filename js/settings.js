@@ -1,6 +1,14 @@
 function Settings() {
 	this.ignore_list = [];
 };
+Settings.prototype.setSkipHelp = function(skip) {
+	this.skip_help = !!skip;
+	if(!this.skip_help) {
+		localStorage.removeItem('skip_help');
+	} else {
+		localStorage.setItem('skip_help', true);
+	}
+}
 
 Settings.prototype.setColor = function(code) {
 	
@@ -22,6 +30,7 @@ Settings.prototype.ready = function() {
 	[
 		'color_code',
 		'ignore_list',
+		'skip_help',
 	].forEach(function(key) {
 		var data = localStorage.getItem(key);
 		if (data) {
