@@ -55,6 +55,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	li.click(function() {
 		$('.channel_tab').removeClass('active');
 		li.addClass('active');
+		list.clearMentions();
 
 		$('.channel_area').hide();
 		channel_div.show();
@@ -72,6 +73,8 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	let ch=chan;
 	let u=user;
+	form.keydown(_=>list.clearMentions())
+	$(list).scroll(_=>list.clearMentions())
 	form.submit(function() {
 		try {
 			let msg = input.val();
@@ -128,6 +131,7 @@ function replaceUI() {
 		if(!user.tells)user.tells={}
 
 		let li = $('<li class="user_tab">');
+		user.li=li;
 		li.text(name);
 		user_ul.append(li);
 
