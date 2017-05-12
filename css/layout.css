@@ -92,3 +92,10 @@ ul.tab-list li:hover {
 	bottom:4rem;
 	right:0;
 }
+.break {
+	word-break:normal;
+}
+pre.nobreak {
+	white-space:nowrap;
+	display:inline-block;
+}

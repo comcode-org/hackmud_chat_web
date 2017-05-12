@@ -62,7 +62,7 @@ MessageList.prototype.handleSlashCommand = function(str) {
 	var components = str.split(' ');
 
 	if (components[0] == 'help') {
-		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>, /tell <user> <optional message>');
+		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>, /tell <user> <optional message>, /users');
 	} else if (components[0] == 'ignore') {
 		if (components[1]) {
 			var user = components[1];
@@ -108,6 +108,13 @@ MessageList.prototype.handleSlashCommand = function(str) {
 		} else {
 			this.safeWrite("Please specify a user to open a conversation with");
 		}
+	} else if (components[0] == 'users') {
+		// not using safe-write here but usernames can't have HTML so it is ok
+		this.channel.users.sort();
+		var u=this.channel.users;
+		var max=Math.max.apply(null,u.map(u=>u.length))+1
+		u=u.map(u=>"<pre class='nobreak'>"+u+"&nbsp;".repeat(max-u.length)+"</pre>");
+		this.write("<span class='break'>"+u.join(' ')+"</span>");
 	}
 
 	this.scrollToBottom();
