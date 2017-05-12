@@ -220,10 +220,10 @@ function colorizeScripts(msg) {
 	];
 
 	return msg.replace(/([a-z_]\w*)\.([a-z_]\w*)/g, function(match, username, script) {
-		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C'
+		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
 
 		return replaceColorCodes('`' + colorCode + username + '`.`L' + script + '`');
-	})
+	});
 }
 
 function replaceColorCodes(string) {
