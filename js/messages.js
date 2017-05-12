@@ -93,9 +93,14 @@ MessageList.prototype.handleSlashCommand = function(str) {
 		}
 	} else if (components[0] == 'color') {
 		if (components[1]) {
-			var color = components[1];
-			settings.setColor(color);
-			this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
+			if(/^[a-z0-5]$/i.test(components[1])) {
+				var color = components[1];
+				settings.setColor(color);
+				this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
+			}
+			else {
+				this.write("Invalid color code. Please specify a single letter, or a number in the range 0-5.");
+			}
 		} else {
 			if (settings.color_code) {
 				var color = settings.color_code;
