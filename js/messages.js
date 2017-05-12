@@ -63,6 +63,10 @@ MessageList.prototype.handleSlashCommand = function(str) {
 
 	if (components[0] == 'help') {
 		this.safeWrite('Commands: /help, /ignore <user>, /color <letter|color code|none>, /tell <user> <optional message>');
+		if (!settings.skip_help) {
+			$("input").attr("placeholder", null)
+			settings.setSkipHelp(true);
+		}
 	} else if (components[0] == 'ignore') {
 		if (components[1]) {
 			var user = components[1];
