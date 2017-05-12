@@ -4,6 +4,7 @@ function MessageList(channel, ul, user) {
 	this.messages = {};
 	this.ids = [];
 	this.user = user;
+	this.unread=0;
 }
 
 MessageList.prototype.poll = function() {
@@ -20,7 +21,16 @@ MessageList.prototype.tell = function(user,to_user,msg) {
 	this.scrollToBottom();
 	return user.tell(to_user,msg);
 }
-
+MessageList.prototype.addMention=function() {
+	this.unread++;
+	this.li.attr('data-unread',this.unread);
+	this.user.updateMentions();
+}
+MessageList.prototype.clearMentions=function() {
+	this.unread=0;
+	this.li.removeAttr('data-unread');
+	this.user.updateMentions();
+}
 MessageList.prototype.recordMessage = function (msg) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
 
@@ -35,6 +45,12 @@ MessageList.prototype.recordMessage = function (msg) {
 		if (settings.ignore_list.includes(m.from_user)) {
 			classList.push('ignore');
 		}
+		if(m.msg.match(new RegExp('@'+this.user.name+'\\b'))) {
+			classList.push('mention');
+			this.addMention();
+		}
+		if(m.to_user==this.user.name)
+			this.addMention();
 		this.write(formatMessage(m), classList);
 	});
 

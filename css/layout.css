@@ -29,6 +29,7 @@ ul.tab-list {
 ul.tab-list li {
 	display: block;
 	max-width:150px;
+	width:150px;
 	word-break:break-all;
 	padding: 5px;
 	margin: 0px;
@@ -92,10 +93,17 @@ ul.tab-list li:hover {
 	bottom:4rem;
 	right:0;
 }
+
 .break {
 	word-break:normal;
 }
 pre.nobreak {
 	white-space:nowrap;
 	display:inline-block;
+}
+
+li[data-unread]::before {
+	content:"[" attr(data-unread) "]";
+	color:red;
+	float:right;
 }

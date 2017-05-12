@@ -24,8 +24,6 @@ function readCookieValue(key) {
 	return document.cookie.replace(new RegExp('(?:(?:^|.*;\\s*)' + key + '\\s*\\=\\s*([^;]*).*$)|^.*$'), "$1");
 }
 
-
-
 function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	let li = $('<li class="channel_tab">');
 	if(tell) {
@@ -58,10 +56,11 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	li.click(function() {
 		$('.channel_tab').removeClass('active');
 		li.addClass('active');
+		list.clearMentions();
 
 		$('.channel_area').hide();
 		channel_div.show();
-		
+
 		list.scrollToBottom();
 	});
 
@@ -75,10 +74,12 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	let ch=chan;
 	let u=user;
+	form.keydown(_=>list.clearMentions())
+	$(list).scroll(_=>list.clearMentions())
 	form.submit(function() {
 		try {
 			let msg = input.val();
-			
+
 			if(msg.trim().length == 0) {
 				return false;
 			}
@@ -131,6 +132,7 @@ function replaceUI() {
 		if(!user.tells)user.tells={}
 
 		let li = $('<li class="user_tab">');
+		user.li=li;
 		li.text(name);
 		user_ul.append(li);
 
@@ -208,6 +210,29 @@ function colorizeMentions(msg) {
 	});
 }
 
+function colorizeScripts(msg) {
+	let trustUsers = [
+		'accts',
+		'autos',
+		'chats',
+		'corps',
+		'escrow',
+		'gui',
+		'kernel',
+		'market',
+		'scripts',
+		'sys',
+		'trust',
+		'users'
+	];
+
+	return msg.replace(/(#s.|[^#\.a-z0-9_]|^)([a-z_][a-z0-9_]*)\.([a-z_][a-z0-9_]*)/g, function(match, pre, username, script) {
+		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
+
+		return replaceColorCodes(pre + '`' + colorCode + username + '`.`L' + script + '`');
+	});
+}
+
 function replaceColorCodes(string) {
 	return string.replace(/`([0-9a-zA-Z])([^:`\n]{1,2}|[^`\n]{3,}?)`/g, colorCallback);
 }
@@ -218,6 +243,7 @@ function formatMessage(obj) {
 	let msg = escapeHtml(obj.msg);
 	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
 	msg = colorizeMentions(msg);
+	msg = colorizeScripts(msg);
 	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
 	return '<span class="timestamp">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
@@ -231,4 +257,3 @@ function colorCallback(not_used, p1, p2) {
 function escapeHtml(str) {
 	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-
