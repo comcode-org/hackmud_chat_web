@@ -1,4 +1,11 @@
-@font-face{font-family:'white_rabbitregular';src:url(/assets/whiterabbit-webfont-12b6a704cb5789470ebb2187a2952adbbb9c89011770928f53db43d81e892b36.eot);src:url(/assets/whiterabbit-webfont-12b6a704cb5789470ebb2187a2952adbbb9c89011770928f53db43d81e892b36.eot?#iefix) format("embedded-opentype"),url(/assets/whiterabbit-webfont-a08ee4f1c070f079eb409696ba99540440b6f1fa7769477eee83b6843a9adc4e.woff2) format("woff2"),url(/assets/whiterabbit-webfont-a1e033ec1d44de59bbeb0fce0797ee3c44fe686014b5fba4a0694ee4168de684.woff) format("woff"),url(/assets/whiterabbit-webfont-98b6964e9a616b11f921f82f290705e51069f1cc4c91bd676e93d4934b6658e8.ttf) format("truetype"),url(/whiterabbit-webfont.svg#white_rabbitregular) format("svg");font-weight:normal;font-style:normal}
+@font-face {
+    font-family: 'white_rabbitregular';
+    src: url('/assets/whiterabbit-webfont.woff2') format('woff2'),
+         url('/assets/whiterabbit-webfont.woff') format('woff'),
+         url('/assets/whiterabbit-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 body {
 	background-color: #101215;
