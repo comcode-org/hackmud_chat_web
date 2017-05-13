@@ -167,30 +167,30 @@ function replaceUI() {
 	$('.channel_area').hide();
 	$('.user_area').hide();
 
-	if (!act.poll_interval) {
-		act.poll_interval = setInterval(function() {
-			act.poll({after:"last"}).then(function(data) {
-				for (user in data.chats) {
-					let channels = act.users[user].channels;
-					let tells = act.users[user].tells;
+	if(act.isPolling())
+		return;
 
-					// new messages, in oldest-to-newest order
-					// TODO deal with tells
-					recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
+	act.setPollDelay(1200);
+	act.startPolling(function(data) {
+		for (user in data.chats) {
+			let channels = act.users[user].channels;
+			let tells = act.users[user].tells;
 
-					data.chats[user].filter(m => !m.channel).map(m=> m.from_user==user?m.to_user:m.from_user).forEach(m=>{if(!tells[m]){tells[m]={};setupChannel(act.users[user],act.users[user].chan_ul,act.users[user].user_div,m,true);}});
-					recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
+			// new messages, in oldest-to-newest order
+			// TODO deal with tells
+			recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
 
-					recent.forEach(function(msg) {
-						channels[msg.channel].list.recordMessage(msg);
-					});
-					recent_tells.forEach(function(msg) {
-						tells[msg.from_user==user?msg.to_user:msg.from_user].list.recordMessage(msg);
-					});
-				}
+			data.chats[user].filter(m => !m.channel).map(m=> m.from_user==user?m.to_user:m.from_user).forEach(m=>{if(!tells[m]){tells[m]={};setupChannel(act.users[user],act.users[user].chan_ul,act.users[user].user_div,m,true);}});
+			recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
+
+			recent.forEach(function(msg) {
+				channels[msg.channel].list.recordMessage(msg);
 			});
-		}, 1200);
-	}
+			recent_tells.forEach(function(msg) {
+				tells[msg.from_user==user?msg.to_user:msg.from_user].list.recordMessage(msg);
+			});
+		}
+	}, {after:"last"});
 }
 
 function colorizeUser(user) {
