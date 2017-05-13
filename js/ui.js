@@ -140,6 +140,8 @@ function replaceUI() {
 		main_div.append(user_div);
 
 		li.click(function() {
+			act.setActiveUser(name);
+
 			$('.user_tab').removeClass('active');
 			li.addClass('active');
 

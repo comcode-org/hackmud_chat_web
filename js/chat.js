@@ -85,7 +85,7 @@ function Account(last=null) {
 	this.active_user=null;
 	this.last_inactive_user_poll=0;
 }
-Account.inactive_user_poll_delay=6000
+Account.inactive_user_poll_delay=6000;
 Account.prototype.login=function(pass) {
 	if(pass.length>10)return this.update(pass)
 	return API.get_token(pass).then(token=>this.update(token.chat_token))
@@ -162,12 +162,21 @@ Account.prototype.print=function() {
 		this.users[i].print();
 }
 Account.prototype.setActiveUser=function(name) {
-	this.active_user.last_active=Date.now();
-	this.active_user=this.users[name]
+	if(this.active_user)
+		this.active_user.last_active=Date.now();
+
+	this.active_user=this.users[name];
 }
 Account.prototype.getActiveUsers=function(max_inactivity=120000) {
-	let threshold = Date.now() - max_inactivity;
-	return this.users.filter(user=>user === this.active_user || user.last_active > threshold)
+	var threshold=Date.now() - max_inactivity;
+	var users={};
+
+	for(var name in this.users) {
+		if(this.users[name].last_active > threshold || this.active_user && name == this.active_user.name)
+			users[name]=this.users[name];
+	}
+
+	return users;
 }
 
 if(typeof exports!="undefined") {
