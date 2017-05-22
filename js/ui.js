@@ -1,7 +1,10 @@
 function ui_ready() {
 	var token = getToken();
 	if (token) {
-		act.update(token).then(replaceUI);
+		act.update(token).then(replaceUI).catch(function() { $('#chat_pass_login').show(); });
+	}
+	else {
+		$('#chat_pass_login').show();
 	}
 }
 
