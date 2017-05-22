@@ -1,4 +1,5 @@
 function ui_ready() {
+	$('#chat_beta_header .contribute').attr({title: "soron  dtr  an1k3t0s  n00bish"})
 	var token = getToken();
 	if (token) {
 		act.update(token).then(replaceUI).catch(function() { $('#chat_pass_login').show(); });
