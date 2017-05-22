@@ -9,10 +9,35 @@ function ui_ready() {
 }
 
 function login(pass) {
-	act.login(pass).then(function() {
-		saveToken();
-		replaceUI();
-	});
+	var input = $('#chat_pass_login input');
+	var error_div = $('#chat_login_error');
+	input.attr('disabled', 'disabled');
+	error_div.text('');
+
+	act.login(pass)
+		.then(function() {
+			saveToken();
+			replaceUI();
+			input.removeAttr('disabled').val('');
+		})
+		.catch(function(res) {
+			var msg;
+			if( res.body && res.body.msg ) {
+				msg = res.body.msg;
+			}
+			else {
+				switch(res.statusCode) {
+					case 0:
+						msg = 'could not contact the server';
+						break;
+					default:
+						msg = 'an error occured (' + res.statusCode + ')';
+						break;
+				}
+			}
+			error_div.text('Login failed: ' + msg);
+			input.removeAttr('disabled');
+		});
 }
 
 function saveToken() {

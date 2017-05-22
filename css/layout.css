@@ -63,6 +63,10 @@ ul.tab-list li:hover {
 	top: 3rem;
 }
 
+#chat_login_error {
+	color: #FF0000;
+}
+
 #chat_beta_header div {
 	position: absolute;
 }

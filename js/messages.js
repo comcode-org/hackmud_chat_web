@@ -98,8 +98,12 @@ MessageList.prototype.handleSlashCommand = function(str) {
 				settings.setColor(color);
 				this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
 			}
+			else if (components[1] == 'none') {
+				settings.setColor('none');
+				this.write('Chat color cleared. Sample: "foo bar baz"');
+			}
 			else {
-				this.write("Invalid color code. Please specify a single letter, or a number in the range 0-5.");
+				this.write('Invalid color code. Please specify a single letter or a number in the range 0-5. Use "/color none" to unset.');
 			}
 		} else {
 			if (settings.color_code) {
