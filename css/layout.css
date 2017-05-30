@@ -112,7 +112,7 @@ li[data-mention]::before {
 	float:right;
 }
 
-li[data-unread]:not(.active) {
+li[data-unread] {
 	color: #ff0;
 	background:rgba(128,128,128,.25);
 }

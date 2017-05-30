@@ -21,10 +21,16 @@ User.prototype.updateInteresting=function() {
 
 	if(n) {
 		this.li.attr('data-mention',n)
+		unread = true;
 	}
 	else {
 		this.li.removeAttr('data-mention')
 	}
 
-	this.li.attr('data-unread',unread);
+	if(unread) {
+		this.li.attr('data-unread',unread);
+	}
+	else {
+		this.li.removeAttr('data-unread');
+	}
 }
