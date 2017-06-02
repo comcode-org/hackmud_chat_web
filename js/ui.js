@@ -86,6 +86,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 		$('.channel_tab').removeClass('active');
 		li.addClass('active');
 		list.clearMentions();
+		list.clearUnreads();
 
 		$('.channel_area').hide();
 		channel_div.show();
@@ -103,8 +104,8 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	let ch=chan;
 	let u=user;
-	form.keydown(_=>list.clearMentions())
-	$(list).scroll(_=>list.clearMentions())
+	form.keydown(_=>list.clearMentions() && list.clearUnreads())
+	$(list).scroll(_=>list.clearMentions() && list.clearUnreads())
 	form.submit(function() {
 		try {
 			let msg = input.val();
