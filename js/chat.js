@@ -61,7 +61,8 @@ Channel.prototype.print=function() {
 function User(account,name,dat) {
 	this.account=account;
 	this.name=name;
-	this.channels={}
+	this.last_active=Date.now();
+	this.channels={};
 	for(var i in dat) {
 		this.channels[i]=new Channel(this,i,dat[i]);
 	}
@@ -81,7 +82,10 @@ function Account(last=null) {
 	this.users=null;
 	this.token=null;
 	this.last=last
+	this.active_user=null;
+	this.last_inactive_user_poll=0;
 }
+Account.inactive_user_poll_delay=6000;
 Account.prototype.login=function(pass) {
 	if(pass.length>10)return this.update(pass)
 	return API.get_token(pass).then(token=>this.update(token.chat_token))
@@ -103,13 +107,24 @@ Account.prototype.update=function(token) {
 Account.prototype.poll=function(ext={}) {
 	var ar=[];
 	var names=[];
+	var users;
+
 	if(this.last) {
 		if(ext.before=='last')
 			ext.before=this.last+0.001;
 		if(ext.after=='last')
 			ext.after=this.last-0.001;
 	}
-	return API.chats(this.token,Object.keys(this.users),ext)
+
+	if(Date.now() > this.last_inactive_user_poll + Account.inactive_user_poll_delay) {
+		this.last_inactive_user_poll=Date.now();
+		users=this.users;
+	}
+	else {
+		users=this.getActiveUsers();
+	}
+
+	return API.chats(this.token,Object.keys(users),ext)
 	.then(o=>{
 		if(!o.ok)return o;
 		var last=0;
@@ -145,6 +160,23 @@ Account.prototype.print=function() {
 	console.log('  users:')
 	for(var i in this.users)
 		this.users[i].print();
+}
+Account.prototype.setActiveUser=function(name) {
+	if(this.active_user)
+		this.active_user.last_active=Date.now();
+
+	this.active_user=this.users[name];
+}
+Account.prototype.getActiveUsers=function(max_inactivity=120000) {
+	var threshold=Date.now() - max_inactivity;
+	var users={};
+
+	for(var name in this.users) {
+		if(this.users[name].last_active > threshold || this.active_user && name == this.active_user.name)
+			users[name]=this.users[name];
+	}
+
+	return users;
 }
 
 if(typeof exports!="undefined") {
