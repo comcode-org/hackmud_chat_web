@@ -1,33 +1,37 @@
 <html>
-	<head>
-		<script src="js/lib/jquery-1.12.4.min.js"></script>
-		<script src="js/chat.js"></script>
-		<script src="js/init.js"></script>
-		<script src="js/messages.js"></script>
-		<script src="js/settings.js"></script>
-		<script src="js/ui.js"></script>
-		<link rel="stylesheet" href="css/layout.css"></link>
-		<link rel="stylesheet" href="css/hackmud.css"></link>
-		<link rel="stylesheet" href="css/chat_colors.css"></link>
-	</head>
-	<body>
-		<script>
-			$(document).ready(function() {
-				settings.ready();
-				ui_ready();
-			});
-		</script>
-		<div id="chat_pass_login" style="display: none;">
-			to connect enter your <span class="scr-user">chat_pass</span> from in-game:
-			<input onchange="login(this.value)">
-			<div id="chat_login_error"></div>
-		</div>
 
-		<div id="chat_beta_header">
-			<div class="title">hackmud web chat beta</div> <div class="contribute">contribute: <a href="https://github.com/DrizzlyBear/hackmud_chat_web" target="_blank">https://github.com/DrizzlyBear/hackmud_chat_web</a></div>
-		</div>
+<head>
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/ui.js"></script>
+    <link rel="stylesheet" href="css/layout.css"></link>
+    <link rel="stylesheet" href="css/hackmud.css"></link>
+    <link rel="stylesheet" href="css/chat_colors.css"></link>
+</head>
 
-		<div id="chat_area">
-		</div>
-	</body>
+<body>
+    <script>
+        $(document).ready(function() {
+            settings.ready();
+            ui_ready();
+        });
+    </script>
+    <div id="chat_pass_login" style="display: none;">
+        to connect enter your <span class="scr-user">chat_pass</span> from in-game:
+        <input onchange="login(this.value)">
+        <div id="chat_login_error"></div>
+    </div>
+
+    <div id="chat_beta_header">
+        <div class="title">hackmud web chat beta</div>
+        <div class="contribute">contribute: <a href="https://github.com/DrizzlyBear/hackmud_chat_web" target="_blank">https://github.com/DrizzlyBear/hackmud_chat_web</a></div>
+    </div>
+
+    <div id="chat_area">
+    </div>
+</body>
+
 </html>
