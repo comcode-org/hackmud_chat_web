@@ -48,11 +48,11 @@ MessageList.prototype.recordMessage = function (msg) {
 	let msgs = Array.isArray(msg) ? msg : [msg];
 
 	msgs.forEach(m => {
-		id = m.id;
+		let id = m.id;
 		this.messages[id] = m;
 		this.ids.push(id);
 
-		classList = ['message'];
+		let classList = ['message'];
 		if (settings.ignore_list.includes(m.from_user)) {
 			classList.push('ignore');
 		}

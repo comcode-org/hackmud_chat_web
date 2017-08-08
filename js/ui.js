@@ -148,17 +148,17 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 function replaceUI() {
 	$('#chat_pass_login').hide();
 
-	main_div = $("#chat_area");
+	let main_div = $("#chat_area");
 
 	main_div.innerHTML = ''
 
-	var user_ul = $('<ul class="tab-list">');
+	let user_ul = $('<ul class="tab-list">');
 	let tabset = $('<div class="tabset">');
 	tabset.append(user_ul);
 	main_div.append(tabset);
 
 	for (let name in act.users) {
-		user = act.users[name];
+		let user = act.users[name];
 		if(!user.tells)user.tells={}
 
 		let li = $('<li class="user_tab">');
@@ -200,16 +200,16 @@ function replaceUI() {
 	if (!act.poll_interval) {
 		act.poll_interval = setInterval(function() {
 			act.poll({after:"last"}).then(function(data) {
-				for (user in data.chats) {
+				for (let user in data.chats) {
 					let channels = act.users[user].channels;
 					let tells = act.users[user].tells;
 
 					// new messages, in oldest-to-newest order
 					// TODO deal with tells
-					recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
+					let recent = data.chats[user].filter(m => m.channel && !channels[m.channel].list.messages[m.id]);
 
 					data.chats[user].filter(m => !m.channel).map(m=> m.from_user==user?m.to_user:m.from_user).forEach(m=>{if(!tells[m]){tells[m]={};setupChannel(act.users[user],act.users[user].chan_ul,act.users[user].user_div,m,true);}});
-					recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
+					let recent_tells = data.chats[user].filter(m => !m.channel && !tells[m.from_user==user?m.to_user:m.from_user].list.messages[m.id]);
 
 					recent.forEach(function(msg) {
 						channels[msg.channel].list.recordMessage(msg);
@@ -256,7 +256,7 @@ function colorizeScripts(msg) {
 		'users'
 	];
 
-	return msg.replace(/(#s.|[^#\.a-z0-9_]|^)([a-z_][a-z0-9_]*)\.([a-z_][a-z0-9_]*)/g, function(match, pre, username, script) {
+	return msg.replace(/(#s.|[^#.a-z0-9_]|^)([a-z_][a-z0-9_]*)\.([a-z_][a-z0-9_]*)/g, function(match, pre, username, script) {
 		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
 
 		return replaceColorCodes(pre + '`' + colorCode + username + '`.`L' + script + '`');
