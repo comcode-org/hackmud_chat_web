@@ -1,15 +1,44 @@
 function ui_ready() {
+	$('#chat_beta_header .contribute').attr({title: "soron  dtr  an1k3t0s  n00bish"})
 	var token = getToken();
 	if (token) {
-		act.update(token).then(replaceUI);
+		act.update(token).then(replaceUI).catch(function() { $('#chat_pass_login').show(); });
+	}
+	else {
+		$('#chat_pass_login').show();
 	}
 }
 
 function login(pass) {
-	act.login(pass).then(function() {
-		saveToken();
-		replaceUI();
-	});
+	var input = $('#chat_pass_login input');
+	var error_div = $('#chat_login_error');
+	input.attr('disabled', 'disabled');
+	error_div.text('');
+
+	act.login(pass)
+		.then(function() {
+			saveToken();
+			replaceUI();
+			input.removeAttr('disabled').val('');
+		})
+		.catch(function(res) {
+			var msg;
+			if( res.body && res.body.msg ) {
+				msg = res.body.msg;
+			}
+			else {
+				switch(res.statusCode) {
+					case 0:
+						msg = 'could not contact the server';
+						break;
+					default:
+						msg = 'an error occured (' + res.statusCode + ')';
+						break;
+				}
+			}
+			error_div.text('Login failed: ' + msg);
+			input.removeAttr('disabled');
+		});
 }
 
 function saveToken() {
@@ -57,6 +86,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 		$('.channel_tab').removeClass('active');
 		li.addClass('active');
 		list.clearMentions();
+		list.clearUnreads();
 
 		$('.channel_area').hide();
 		channel_div.show();
@@ -74,8 +104,8 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 	let ch=chan;
 	let u=user;
-	form.keydown(_=>list.clearMentions())
-	$(list).scroll(_=>list.clearMentions())
+	form.keydown(_=>list.clearMentions() && list.clearUnreads())
+	$(list).scroll(_=>list.clearMentions() && list.clearUnreads())
 	form.submit(function() {
 		try {
 			let msg = input.val();
@@ -88,7 +118,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 				list.handleSlashCommand(msg.slice(1));
 			} else {
 				if (settings.color_code) {
-					msg = '`' + settings.color_code + msg + '`';
+					msg = colorize(settings.color_code,msg);
 				}
 				if(tell)
 					list.tell(u,ch,msg)
@@ -256,4 +286,62 @@ function colorCallback(not_used, p1, p2) {
 
 function escapeHtml(str) {
 	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+
+function colorize(color,msg) {
+	return assemble_text(parse_colors(msg,color))
+}
+
+function parse_colors(s,color) {
+	var dat=[];
+	var l=s.split("\n");
+	for(var j=0;j<l.length;++j) {
+		var s=l[j];
+		for(var i=0;i<s.length;) {
+			var ss=s.substring(i);
+			if(s[i]=='`') {
+				var reg=new RegExp("^`([^`]+)`");
+				var x=ss.match(reg);
+				if(x) {
+					dat.push({
+						start:'`'+x[1][0],
+						end:'`',
+						str:x[1].substring(1)
+					})
+					i+=x[0].length;
+					continue;
+				}
+			}
+
+			var z=ss.search(/`/,1);
+			if(z==-1)z=ss.length;
+			if(z==0)z=1;
+			var str=ss.substring(0,z);
+			dat.push({
+				start:color?'`'+color:"",
+				end:color?'`':"",
+				str:str
+			});
+			i+=str.length;
+		}
+		if(j!=l.length-1) {
+			dat.push({
+				start:"",
+				end:"",
+				str:"\n"
+			});
+		}
+	}
+
+	return dat
+}
+
+
+function assemble_text(s) {
+	var ret="";
+	for(var i=0;i<s.length;++i)
+		if(s[i].str.length)
+			ret+=s[i].start+s[i].str+s[i].end;
+	return ret;
 }

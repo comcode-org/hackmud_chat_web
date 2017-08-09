@@ -4,7 +4,8 @@ function MessageList(channel, ul, user) {
 	this.messages = {};
 	this.ids = [];
 	this.user = user;
-	this.unread=0;
+	this.mentions = 0;
+	this.unread = false;
 }
 
 MessageList.prototype.poll = function() {
@@ -21,15 +22,25 @@ MessageList.prototype.tell = function(user,to_user,msg) {
 	this.scrollToBottom();
 	return user.tell(to_user,msg);
 }
+MessageList.prototype.addUnread=function() {
+	this.unread = true;
+	this.li.attr('data-unread', this.unread);
+	this.user.updateInteresting();
+}
+MessageList.prototype.clearUnreads=function() {
+	this.unread = false;
+	this.li.removeAttr('data-unread');
+	this.user.updateInteresting();
+}
 MessageList.prototype.addMention=function() {
-	this.unread++;
-	this.li.attr('data-unread',this.unread);
-	this.user.updateMentions();
+	this.mentions++;
+	this.li.attr('data-mention',this.mentions);
+	this.user.updateInteresting();
 }
 MessageList.prototype.clearMentions=function() {
-	this.unread=0;
-	this.li.removeAttr('data-unread');
-	this.user.updateMentions();
+	this.mentions=0;
+	this.li.removeAttr('data-mention');
+	this.user.updateInteresting();
 }
 MessageList.prototype.recordMessage = function (msg) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
@@ -51,6 +62,7 @@ MessageList.prototype.recordMessage = function (msg) {
 		}
 		if(m.to_user==this.user.name)
 			this.addMention();
+		this.addUnread();
 		this.write(formatMessage(m), classList);
 	});
 
@@ -98,8 +110,12 @@ MessageList.prototype.handleSlashCommand = function(str) {
 				settings.setColor(color);
 				this.write('Set chat color to "' + color + '". Sample: "' + colorCallback(null, color, 'foo bar baz') + '"');
 			}
+			else if (components[1] == 'none') {
+				settings.setColor('none');
+				this.write('Chat color cleared. Sample: "foo bar baz"');
+			}
 			else {
-				this.write("Invalid color code. Please specify a single letter, or a number in the range 0-5.");
+				this.write('Invalid color code. Please specify a single letter or a number in the range 0-5. Use "/color none" to unset.');
 			}
 		} else {
 			if (settings.color_code) {

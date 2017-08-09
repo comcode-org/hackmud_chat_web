@@ -63,6 +63,10 @@ ul.tab-list li:hover {
 	top: 3rem;
 }
 
+#chat_login_error {
+	color: #FF0000;
+}
+
 #chat_beta_header div {
 	position: absolute;
 }
@@ -102,8 +106,13 @@ pre.nobreak {
 	display:inline-block;
 }
 
-li[data-unread]::before {
-	content:"[" attr(data-unread) "]";
+li[data-mention]::before {
+	content:"[" attr(data-mention) "]";
 	color:red;
 	float:right;
+}
+
+li[data-unread] {
+	color: #ff0;
+	background:rgba(128,128,128,.25);
 }

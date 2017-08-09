@@ -1,21 +1,36 @@
 var act=new Account();
 
 function getMentions(ch) {
-	var n=ch.list.li.attr('data-unread');
+	var n=ch.list.li.attr('data-mention');
 	if(n)return parseInt(n);
 	return 0;
 }
-User.prototype.updateMentions=function() {
+function isUnread(ch) {
+	return !!ch.list.li.attr('data-unread');
+}
+User.prototype.updateInteresting=function() {
 	var n=0;
-	for(var i in this.channels)
+	var unread=false;
+	for(var i in this.channels) {
 		n+=getMentions(this.channels[i]);
-	for(var i in this.tells)
+		unread = unread || isUnread(this.channels[i]);
+	}
+	for(var i in this.tells) {
 		n+=getMentions(this.tells[i]);
+	}
 
 	if(n) {
-		this.li.attr('data-unread',n)
+		this.li.attr('data-mention',n)
+		unread = true;
 	}
 	else {
-		this.li.removeAttr('data-unread')
+		this.li.removeAttr('data-mention')
+	}
+
+	if(unread) {
+		this.li.attr('data-unread',unread);
+	}
+	else {
+		this.li.removeAttr('data-unread');
 	}
 }
