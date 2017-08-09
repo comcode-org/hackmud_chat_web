@@ -80,9 +80,6 @@ User.prototype.print=function() {
 function Account(last=null) {
 	this.users=null;
 	this.token=null;
-	this.poll_delay=null;
-	this.poll_interval=null;
-	this.poll_callback=null;
 	this.last=last;
 }
 Account.prototype.login=function(pass) {
@@ -148,33 +145,6 @@ Account.prototype.print=function() {
 	console.log('  users:')
 	for(var i in this.users)
 		this.users[i].print();
-}
-Account.prototype.setPollDelay=function(delay) {
-	this.poll_delay=delay;
-
-	if(!this.poll_callback)
-		return;
-
-	if(this.isPolling()) {
-		this.stopPolling();
-		this.startPolling(this.poll_callback, this.poll_ext);
-	}
-}
-Account.prototype.startPolling=function(callback, ext) {
-	this.poll_callback=callback;
-	this.poll_ext=ext;
-
-	let act=this;
-	this.poll_interval=setInterval(function() {
-		act.poll(ext).then(callback)
-	}, this.poll_delay);
-}
-Account.prototype.stopPolling=function() {
-	clearInterval(this.poll_interval);
-	this.poll_interval=null;
-}
-Account.prototype.isPolling=function() {
-	return !!this.poll_interval;
 }
 
 if(typeof exports!="undefined") {
