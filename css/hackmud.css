@@ -8,7 +8,7 @@
 }
 
 body {
-	background-color: #101215;
+	background-image: repeating-linear-gradient(180deg, #121317, #121317 .25em, #0D0E12 .25em, #0D0E12 .5em);
 	color: #7AB2F4;
 	font-family:"white_rabbitregular";
 }
