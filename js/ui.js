@@ -200,6 +200,15 @@ function replaceUI() {
 
 	if (!act.poll_interval) {
 		act.poll_interval = setInterval(function() {
+			if(act.maintenanceMode) {
+				// Skip every other poll in maintenance mode
+				// When game is in maintenance mode, first poll will set this property
+				// Next poll-interval, it will delete it and not actually hit the API.
+				// The following poll-interval, since it isn't set, the API will get polled
+				// If still in maintenance mode, repeat. Otherwise continue as normal.
+				delete act.maintenanceMode;
+				return;
+			}
 			act.poll({after:"last"}).then(function(data) {
 				for (user in data.chats) {
 					let channels = act.users[user].channels;
@@ -219,13 +228,27 @@ function replaceUI() {
 						tells[msg.from_user==user?msg.to_user:msg.from_user].list.recordMessage(msg);
 					});
 				}
-			});
+			},handleStandardErrors);
 		}, 1200);
 	}
 }
 function logout() {
 	document.cookie='chat_token=null;expires='+new Date().toUTCString();
 	window.location.reload();
+}
+function handleStandardErrors(err) {
+	if(err.statusCode) {
+		switch(err.statusCode) {
+			case 401: // unauthorized; chat token revoked
+				alert('Your chat token has been deauthorized. Logging out.');
+				logout();
+				break;
+			case 429: // too many requests, re-use poll-at-half-rate logic
+			case 503: // maintenance mode, poll at half rate
+				act.maintenanceMode=true;
+				break;
+		}
+	}
 }
 
 function colorizeUser(user) {
