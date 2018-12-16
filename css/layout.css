@@ -74,6 +74,9 @@ ul.tab-list li:hover {
 #chat_beta_header .title {
 	left: 0;
 }
+#chat_beta_header #logout {
+	display:none;
+}
 #chat_beta_header .contribute {
 	right: 0;
 }

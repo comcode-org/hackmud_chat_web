@@ -147,6 +147,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 function replaceUI() {
 	$('#chat_pass_login').hide();
+	$('#logout').show();
 
 	main_div = $("#chat_area");
 
@@ -221,6 +222,10 @@ function replaceUI() {
 			});
 		}, 1200);
 	}
+}
+function logout() {
+	document.cookie='chat_token=null;expires='+new Date().toUTCString();
+	window.location.reload();
 }
 
 function colorizeUser(user) {
