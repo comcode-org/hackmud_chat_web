@@ -116,3 +116,7 @@ li[data-unread] {
 	color: #ff0;
 	background:rgba(128,128,128,.25);
 }
+
+.msg-content {
+	word-break:break-all;
+}
