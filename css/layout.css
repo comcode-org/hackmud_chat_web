@@ -74,6 +74,9 @@ ul.tab-list li:hover {
 #chat_beta_header .title {
 	left: 0;
 }
+#chat_beta_header #logout {
+	display:none;
+}
 #chat_beta_header .contribute {
 	right: 0;
 }
@@ -115,4 +118,8 @@ li[data-mention]::before {
 li[data-unread] {
 	color: #ff0;
 	background:rgba(128,128,128,.25);
+}
+
+.msg-content {
+	word-break:break-all;
 }
