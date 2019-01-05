@@ -15,7 +15,11 @@ MessageList.prototype.poll = function() {
 
 MessageList.prototype.send = function(msg) {
 	this.scrollToBottom();
-	return this.channel.send(msg);
+
+	if(msg.length > 1000 || msg.match(/\n/g).length > 10)
+		this.write('Messages may contain no more than 1000 characters and 10 lines.');
+	else
+		return this.channel.send(msg);
 }
 
 MessageList.prototype.tell = function(user,to_user,msg) {

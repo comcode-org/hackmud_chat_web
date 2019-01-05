@@ -96,7 +96,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 
 
 	let form = $('<form action="">');
-	let input = $('<input type="text" class="chat-input">');
+	let input = $('<textarea rows="1" class="chat-input">');
 	if (!settings.skip_help)
 	{
 		input.attr("placeholder", "/help");
@@ -139,8 +139,18 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 			list.pgDn();
 		} else if(keycode == 33) { // PgUp
 			list.pgUp();
+		} else if(keycode == 13 && !e.shiftKey) { // Enter (w/o shift modifier)
+			form.submit();
+			e.preventDefault();
+			input.attr('rows', 1);
+			return false;
 		}
 	});
+	
+	input.on('input',function() {
+		input.attr('rows', (input.val().match(/\n/g) || []).length + 1);
+	});
+
 	form.append(input);
 	channel_div.append(form);
 }
