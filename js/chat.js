@@ -119,9 +119,9 @@ Account.prototype.poll=function(ext={}) {
 					.filter(m=>typeof m.channel!="undefined" && (m.is_join || m.is_leave))
 					.forEach(m=>{
 						var ch=this.users[i].channels[m.channel];
-            if(!ch) {
-						  ch=this.users[i].channels[m.channel]=new Channel(this.users[i],m.channel,[]);
-					  }
+            			if(!ch) {
+							ch=this.users[i].channels[m.channel]=new Channel(this.users[i],m.channel,[]);
+						}
 						if(m.is_join) {
 							if(ch.users.indexOf(m.from_user)==-1)
 								ch.users.push(m.from_user);
