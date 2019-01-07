@@ -1,6 +1,5 @@
 .message_list {
 	overflow-y: auto;
-	max-height: 100%;
 	white-space: pre-wrap;
 	line-height: 0.9em;
 }
@@ -11,8 +10,8 @@
 
 .chat-input {
 	width: 100%;
+	resize: none;
 }
-
 
 ul.tab-list {
 	list-style: none;
@@ -97,8 +96,10 @@ ul.tab-list li:hover {
 	position:absolute;
 	left:330px;
 	top:0;
-	bottom:4rem;
+	bottom:0;
 	right:0;
+	display:flex;
+	flex-direction:column;
 }
 
 .break {
