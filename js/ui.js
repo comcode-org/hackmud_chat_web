@@ -111,6 +111,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 			let msg = input.val();
 
 			if(msg.trim().length == 0) {
+				input.val('');
 				return false;
 			}
 
