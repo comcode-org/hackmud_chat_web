@@ -92,7 +92,6 @@ Account.prototype.update=function(token) {
 	return API.account_data(this.token).then(dat=>{
 		if(!dat.ok)return false;
 		this.users={};
-		var channels=[];
 		for(var i in dat.users) {
 			var name=i
 			this.users[name]=new User(this,name,dat.users[i]);
@@ -101,8 +100,6 @@ Account.prototype.update=function(token) {
 	})
 }
 Account.prototype.poll=function(ext={}) {
-	var ar=[];
-	var names=[];
 	if(this.last) {
 		if(ext.before=='last')
 			ext.before=this.last+0.001;
@@ -110,37 +107,36 @@ Account.prototype.poll=function(ext={}) {
 			ext.after=this.last-0.001;
 	}
 	return API.chats(this.token,Object.keys(this.users),ext)
-	.then(o=>{
-		if(!o.ok)return o;
-		var last=0;
-		for(var i in o.chats) {
-			o.chats[i].sort((a,b)=>a.t-b.t);
-			var l=o.chats[i];
-			if(l.length && l[l.length-1].t>last)
-				last=l[l.length-1].t;
-			o.chats[i]
-				.filter(m=>typeof m.channel!="undefined" && (m.is_join || m.is_leave))
-				.forEach(m=>{
-					var ch=this.users[i].channels[m.channel];
-					if(!ch) {
-						ch=this.users[i].channels[m.channel]=new Channel(this.users[i],m.channel,[]);
-					}
-					if(m.is_join) {
-						if(ch.users.indexOf(m.from_user)==-1)
-							ch.users.push(m.from_user);
-					}
-					if(m.is_leave) {
-						var ind=ch.users.indexOf(m.from_user);
-						for(var ind=ch.users.indexOf(m.from_user);ind!=-1;ind=ch.users.indexOf(m.from_user)) {
-							ch.users.splice(ind,1);
+		.then(o=>{
+			if(!o.ok)return o;
+			var last=0;
+			for(var i in o.chats) {
+				o.chats[i].sort((a,b)=>a.t-b.t);
+				var l=o.chats[i];
+				if(l.length && l[l.length-1].t>last)
+					last=l[l.length-1].t;
+				o.chats[i]
+					.filter(m=>typeof m.channel!="undefined" && (m.is_join || m.is_leave))
+					.forEach(m=>{
+						var ch=this.users[i].channels[m.channel];
+            			if(!ch) {
+							ch=this.users[i].channels[m.channel]=new Channel(this.users[i],m.channel,[]);
 						}
-					}
-				})
-		}
-		if(last)
-			this.last=last
-		return o;
-	});
+						if(m.is_join) {
+							if(ch.users.indexOf(m.from_user)==-1)
+								ch.users.push(m.from_user);
+						}
+						if(m.is_leave) {
+							for(var ind=ch.users.indexOf(m.from_user);ind!=-1;ind=ch.users.indexOf(m.from_user)) {
+								ch.users.splice(ind,1);
+							}
+						}
+					})
+			}
+			if(last)
+				this.last=last
+			return o;
+		});
 }
 Account.prototype.print=function() {
 	console.log('Account:');

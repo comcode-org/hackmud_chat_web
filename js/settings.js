@@ -1,6 +1,6 @@
 function Settings() {
 	this.ignore_list = [];
-};
+}
 Settings.prototype.setSkipHelp = function(skip) {
 	this.skip_help = !!skip;
 	if(!this.skip_help) {
@@ -11,13 +11,13 @@ Settings.prototype.setSkipHelp = function(skip) {
 }
 
 Settings.prototype.setColor = function(code) {
-	
+
 	if(code == "none") {
 		this.color_code = null;
 		localStorage.removeItem('color_code');
 	} else {
 		this.color_code = code;
-		localStorage.setItem('color_code', JSON.stringify(code));	
+		localStorage.setItem('color_code', JSON.stringify(code));
 	}
 }
 
@@ -40,4 +40,3 @@ Settings.prototype.ready = function() {
 }
 
 var settings = new Settings();
-
