@@ -224,7 +224,7 @@ function replaceUI() {
 }
 
 function colorizeUser(user) {
-	if(!user)return "`C[deleted user]`";
+	if(!user)return "`C<user deleted>`";
 	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
