@@ -1,0 +1,18 @@
+{
+  "name": "hackmud_chat_web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:DrizzlyBear/hackmud_chat_web.git",
+  "author": "gubester <sean.gubelman@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "static-server": "^2.2.1"
+  },
+  "scripts": {
+    "dev": "node index.js",
+    "test": "jest"
+  }
+}
