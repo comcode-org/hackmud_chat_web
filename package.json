@@ -6,13 +6,17 @@
   "author": "gubester <sean.gubelman@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^5.2.0",
+    "request": "^2.88.0",
+    "sinon": "^7.2.3"
   },
   "dependencies": {
     "static-server": "^2.2.1"
   },
   "scripts": {
     "dev": "node index.js",
-    "test": "jest"
+    "test": "mocha"
   }
 }
