@@ -111,6 +111,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 			let msg = input.val();
 
 			if(msg.trim().length == 0) {
+				input.val('');
 				return false;
 			}
 
@@ -262,6 +263,7 @@ function handleStandardErrors(err) {
 }
 
 function colorizeUser(user) {
+	if(!user)return "`C<user deleted>`";
 	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
