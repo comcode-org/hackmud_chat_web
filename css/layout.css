@@ -2,6 +2,7 @@
 	overflow-y: auto;
 	white-space: pre-wrap;
 	line-height: 0.9em;
+    padding-inline-start: 0;
 }
 
 .message_list li {
@@ -20,6 +21,7 @@ ul.tab-list {
 	left:0;
 	bottom:0;
 	overflow-y:auto;
+    padding-inline-start: 0;
 }
 .user_area ul.tab-list {
 	left:160px;
