@@ -296,10 +296,10 @@ function colorizeScripts(msg) {
 		'users'
 	];
 
-	return msg.replace(/(#s\.|[^#.a-z0-9_]|^)([a-z_][a-z0-9_]*)\.([a-z_][a-z0-9_]*)/g, function(match, pre, username, script) {
+	return msg.replace(/(\s#s\.|\s|^)([a-z_][a-z0-9_]{0,25})\.([a-z_][a-z0-9_]{0,25})(\s|$)/g, function(match, pre, username, script, post) {
 		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
 
-		return replaceColorCodes(pre + '`' + colorCode + username + '`.`L' + script + '`');
+		return replaceColorCodes(pre + '`' + colorCode + username + '`.`L' + script + '`' + post);
 	});
 }
 
@@ -313,6 +313,7 @@ function formatMessage(obj) {
 	let msg = escapeHtml(obj.msg);
 	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
 	msg = colorizeMentions(msg);
+	msg = replaceLinks(msg);
 	msg = colorizeScripts(msg);
 	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
@@ -328,6 +329,11 @@ function escapeHtml(str) {
 	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function replaceLinks(str) {
+	return str.replace(/https:\/\/(?:www.)?hackmud.com\/[A-Za-z0-9\-\._~\:\/\?\#\&\*\+\,\;=\%]*/, function(match) {
+		return "<a href=\""+match+"\" target=\"_blank\">"+match+"</a>"
+	})
+}
 
 function colorize(color,msg) {
 	return assemble_text(parse_colors(msg,color))
