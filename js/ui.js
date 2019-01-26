@@ -296,7 +296,7 @@ function colorizeScripts(msg) {
 		'users'
 	];
 
-	return msg.replace(/(\s#s\.|\s|^)([a-z_][a-z0-9_]{0,25})\.([a-z_][a-z0-9_]{0,25})(\s|$)/g, function(match, pre, username, script, post) {
+	return msg.replace(/(\s#s\.|\s|^)([a-z_][a-z0-9_]{0,25})\.([a-z_][a-z0-9_]{0,25})(\s|$|\{)/g, function(match, pre, username, script, post) {
 		let colorCode = trustUsers.indexOf(username) !== -1 ? 'F' : 'C';
 
 		return replaceColorCodes(pre + '`' + colorCode + username + '`.`L' + script + '`' + post);
