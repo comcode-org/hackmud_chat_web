@@ -1,54 +1,10 @@
-.key {
-	color: #00FFFF;
-}
-
-.val {
-	color: #FF00EC;
-}
-
-.scr-user {
-	color: #9B9B9B;
-}
-.scr-trust {
-	color: #FF8000;
-}
-.scr-scr, .recd {
-	color: #1EFF00;
-}
-
-.trust {
-	color: #FF0000;
-}
-.array-messed-up {
-	color: #FFFFFF;
-}
-
-.gc-num {
-	color: #CACACA;
-}
-.gc-gc {
-	color: #9B9B9B;
-}
-.gc-k {
-	color: #00FFFF;
-}
-
-.msg-content::before, .msg-content::after {
-	content: ":::";
-	color: #3F3F3F;
-}
-
-.ignore {
-	opacity: 0.3;
-}
-
 .col-cap-A, .col-1 {
 	color: #FFFFFF;
 }
 .col-a {
 	color: #000000;
 }
-.col-cap-B, .col-0, .timestamp {
+.col-cap-B, .col-0 {
 	color: #CACACA;
 }
 .col-b {
