@@ -24,22 +24,22 @@ ul.tab-list {
     padding-inline-start: 0;
 }
 .user_area ul.tab-list {
-	left:160px;
+	left: 13rem;
 }
 
 ul.tab-list li {
 	display: block;
-	max-width:150px;
-	width:150px;
-	word-break:break-all;
-	padding: 5px;
-	margin: 0px;
-	cursor: pointer;
-	border: 1px solid white;
+    width: 12rem;
+    word-break: keep-all;
+    padding: 0.2rem;
+    margin: 0;
+    cursor: pointer;
+    border: .1rem solid transparent;
+    overflow: hidden;
 }
 
 ul.tab-list li.active {
-	border: 1px solid yellow;
+	border: .1rem solid yellow;
 	background:rgba(255,255,0,.25)
 }
 
@@ -96,7 +96,7 @@ ul.tab-list li:hover {
 }
 #chat_area .channel_area {
 	position:absolute;
-	left:330px;
+	left: 26rem;
 	top:0;
 	bottom:0;
 	right:0;
@@ -113,9 +113,9 @@ pre.nobreak {
 }
 
 li[data-mention]::before {
-	content:"[" attr(data-mention) "]";
+	content: attr(data-mention);
 	color:red;
-	float:right;
+	padding-right: .4rem;
 }
 
 li[data-unread] {
@@ -125,4 +125,8 @@ li[data-unread] {
 
 .msg-content {
 	word-break:break-all;
+}
+
+.message.mention {
+	background-color: rgba(24,24,100,0.5);
 }
