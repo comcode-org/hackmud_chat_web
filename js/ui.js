@@ -309,7 +309,7 @@ function replaceColorCodes(string) {
 
 function formatMessage(obj) {
 	let date = new Date(obj.t * 1000);
-	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join(":");
+	let timestr = [date.getHours(), date.getMinutes()].map(a => ('0' + a).slice(-2)).join("");
 	let msg = escapeHtml(obj.msg);
 	let coloredUser = replaceColorCodes(colorizeUser(obj.from_user));
 	msg = colorizeMentions(msg);
