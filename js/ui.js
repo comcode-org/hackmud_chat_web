@@ -56,10 +56,10 @@ function readCookieValue(key) {
 function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 	let li = $('<li class="channel_tab">');
 	if(tell) {
-		li.append($('<span class="col-C">@</span>'));
+		li.append($('<span class="col-c">@</span>'));
 	}
 	else {
-		li.append($('<span class="col-C">#</span>'));
+		li.append($('<span class="col-c">#</span>'));
 	}
 	li.append(chan);
 	chan_ul.append(li);
