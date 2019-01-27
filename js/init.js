@@ -20,11 +20,11 @@ User.prototype.updateInteresting=function() {
 	}
 
 	if(n) {
-		this.li.attr('data-mention',n)
+		this.li.attr('data-mention-text',n > 9 ? "+" : n)
 		unread = true;
 	}
 	else {
-		this.li.removeAttr('data-mention')
+		this.li.removeAttr('data-mention-text')
 	}
 
 	if(unread) {

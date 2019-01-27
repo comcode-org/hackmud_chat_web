@@ -38,12 +38,14 @@ MessageList.prototype.clearUnreads=function() {
 }
 MessageList.prototype.addMention=function() {
 	this.mentions++;
-	this.li.attr('data-mention',this.mentions);
+	this.li.attr('data-mention', this.mentions);
+	this.li.attr('data-mention-text', this.mentions > 9 ? "+" : this.mentions);
 	this.user.updateInteresting();
 }
 MessageList.prototype.clearMentions=function() {
 	this.mentions=0;
 	this.li.removeAttr('data-mention');
+	this.li.removeAttr('data-mention-text');
 	this.user.updateInteresting();
 }
 MessageList.prototype.recordMessage = function (msg) {
