@@ -1,17 +1,22 @@
 const express = require('express')
-const sass = require('node-sass-middleware')
+const sass = require('node-sass')
+const sassMiddleware = require('node-sass-middleware')
+const eyeglass = require("eyeglass");
+
 const app = express()
 const port = 1337
 
-app.use(express.static('./'))
-
 app.use(
-  sass({
+  sassMiddleware(
+    eyeglass({
       src: __dirname, //where the sass files are
       dest: __dirname, //where css should go
-      debug: true // obvious
-  })
-);
+      debug: true, // obvious
+    })
+  )
+)
+
+app.use(express.static('./'))
 
 app.get('/', (req, res) => res.static('index'))
 
