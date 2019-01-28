@@ -263,7 +263,7 @@ function handleStandardErrors(err) {
 }
 
 function colorizeUser(user) {
-	if(!user)return "`C<user deleted>`";
+	if(!user)return "`C&lt;user deleted&gt;`";
 	let valid_colors = "BEFGHIJLMNQUVWY";
 	let num_colors = valid_colors.length;
 
