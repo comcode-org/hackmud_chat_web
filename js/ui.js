@@ -317,7 +317,7 @@ function formatMessage(obj) {
 	msg = colorizeScripts(msg);
 	msg = replaceColorCodes(msg).replace(/\n/g, '<br>');
 
-	return '<span class="timestamp">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
+	return '<span class="timestamp" title="' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString() +'">' + timestr + "</span> " + coloredUser + ' <span class="msg-content">' + msg + '</span>';
 }
 
 function colorCallback(not_used, p1, p2) {
