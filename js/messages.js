@@ -6,6 +6,28 @@ function MessageList(channel, ul, user) {
 	this.user = user;
 	this.mentions = 0;
 	this.unread = false;
+
+	let self = this;
+	this.ul.on('scroll', function () { self.checkLoad() } );
+}
+
+MessageList.prototype.loadMore = function() {
+	let self = this;
+	this.channel.older().then(function(data) {
+		let recent = data.chats[self.user.name].filter(m => m.channel && m.channel == self.channel.name && !self.messages[m.id]);
+
+		if (recent.length > 0) {
+			self.recordMessage(recent, true);
+
+			self.checkLoad();
+		}
+	});
+}
+
+MessageList.prototype.checkLoad = function() {
+	if (this.isAtTop()) {
+		this.loadMore();
+	}
 }
 
 MessageList.prototype.poll = function() {
@@ -48,8 +70,15 @@ MessageList.prototype.clearMentions=function() {
 	this.li.removeAttr('data-mention-text');
 	this.user.updateInteresting();
 }
-MessageList.prototype.recordMessage = function (msg) {
+
+MessageList.prototype.isAtTop = function() {
+	return this.ul.scrollTop() <= 0;
+}
+
+MessageList.prototype.recordMessage = function (msg, prepend) {
 	let at_bottom = this.ul[0].scrollHeight - this.ul.scrollTop() == this.ul.height();
+	let at_top = this.isAtTop();
+	let previousHeight = this.ul[0].scrollHeight;
 
 	let msgs = Array.isArray(msg) ? msg : [msg];
 
@@ -69,22 +98,29 @@ MessageList.prototype.recordMessage = function (msg) {
 		if(m.to_user==this.user.name)
 			this.addMention();
 		this.addUnread();
-		this.write(formatMessage(m), classList);
+		this.write(formatMessage(m), classList, prepend);
 	});
 
-	if (at_bottom) {
+	if (prepend && at_top) {
+		this.scrollTo(this.ul[0].scrollHeight - previousHeight);
+	} else if (!prepend && at_bottom) {
 		this.scrollToBottom();
 	}
 }
 
-MessageList.prototype.write = function(html, classArray) {
+MessageList.prototype.write = function(html, classArray, prepend) {
 	if (!classArray) {
 		classArray = [];
 	}
 
 	let li = $('<li class="' + classArray.join(' ') + '">');
 	li.html(html);
-	this.ul.append(li);
+
+	if (prepend) {
+		this.ul.prepend(li);
+	} else {
+		this.ul.append(li);
+	}
 }
 
 MessageList.prototype.safeWrite = function(str, classArray) {
@@ -183,4 +219,8 @@ MessageList.prototype.pgDn = function() {
 
 MessageList.prototype.scrollToBottom = function() {
 	this.ul.scrollTop(1e10); // just scroll down a lot
+}
+
+MessageList.prototype.scrollTo = function(location) {
+	this.ul.scrollTop(location);
 }

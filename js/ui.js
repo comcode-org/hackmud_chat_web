@@ -92,6 +92,7 @@ function setupChannel(user,chan_ul,user_div,chan,tell=false) {
 		channel_div.show();
 
 		list.scrollToBottom();
+		list.checkLoad();
 	});
 
 

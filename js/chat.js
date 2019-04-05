@@ -53,6 +53,25 @@ function Channel(user,name,users) {
 Channel.prototype.send=function(msg) {
 	return API.send(this.user.account.token,this.user.name,this.name,msg);
 }
+Channel.prototype.older=function() {
+	var ext = {
+		channels: [this.name],
+		sort: -1,
+		before: this.first ? this.first : (new Date()).getUTCMilliseconds()/1000.0,
+	}
+	ext.before = this.first
+	return API.chats(this.user.account.token,[this.user.name],ext)
+		.then(o=>{
+			if(!o.ok) return o;
+			if (o.chats && o.chats[this.user.name] && o.chats[this.user.name].length)
+			{
+				let chats = o.chats[this.user.name];
+				this.first = chats[chats.length-1].t;
+			}
+
+			return o;
+		});
+}
 Channel.prototype.print=function() {
 	console.log('        Channel:');
 	console.log('          name : '+this.name)
