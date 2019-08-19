@@ -6,6 +6,7 @@ function MessageList(channel, ul, user) {
 	this.user = user;
 	this.mentions = 0;
 	this.unread = false;
+	this.isAutocolor = false;
 
 	let self = this;
 	this.ul.on('scroll', function () { self.checkLoad() } );
@@ -38,14 +39,24 @@ MessageList.prototype.poll = function() {
 MessageList.prototype.send = function(msg) {
 	this.scrollToBottom();
 
-	if(msg.length > 1000 || (msg.indexOf('\n') > -1 && msg.match(/\n/g).length > 10))
+	if(msg.length > 1000 || (msg.indexOf('\n') > -1 && msg.match(/\n/g).length > 10)) {
 		this.write('Messages may contain no more than 1000 characters and 10 lines.');
-	else
+	} else {
+		if (this.isAutocolor) {
+			msg = this.autoColorMsg(msg);
+		}
+
 		return this.channel.send(msg);
+	}
 }
 
 MessageList.prototype.tell = function(user,to_user,msg) {
 	this.scrollToBottom();
+
+	if (this.isAutocolor) {
+		msg = this.autoColorMsg(msg);
+	}
+
 	return user.tell(to_user,msg);
 }
 MessageList.prototype.addUnread=function() {
@@ -108,6 +119,17 @@ MessageList.prototype.recordMessage = function (msg, prepend) {
 	}
 }
 
+MessageList.prototype.autoColorMsg = function(msg) {
+	let colored = msg.match(/([a-zA-Z])([1-3]?)/g);
+	colored = colored.map(v => {
+		let s = !v[1] ? "▀" : "▁▃▅"[parseInt(v[1])-1];
+		s = v[0] === "M" ? "█" : s;
+		return `\`${v[0]}${s}\``;
+	});
+
+	return colored.join("");
+}
+
 MessageList.prototype.write = function(html, classArray, prepend) {
 	if (!classArray) {
 		classArray = [];
@@ -145,6 +167,9 @@ MessageList.prototype.handleSlashCommand = function(str) {
 		} else {
 			this.safeWrite("Ignore list: " + settings.ignore_list.join(", "));
 		}
+	} else if (components[0] == 'z') {
+		this.isAutocolor = !this.isAutocolor;
+		this.safeWrite(this.isAutocolor.toString());
 	} else if (components[0] == 'color') {
 		if (components[1]) {
 			if(/^[a-z0-5]$/i.test(components[1])) {
