@@ -96,7 +96,7 @@ User.prototype.print=function() {
 		this.channels[i].print();
 }
 //------------------------------------------------------------------------------
-function Account(last=null) {
+function Account(last=Date.now()/1000-300 /* 5 minutes ago*/) {
 	this.users=null;
 	this.token=null;
 	this.last=last
@@ -121,9 +121,13 @@ Account.prototype.update=function(token) {
 Account.prototype.poll=function(ext={}) {
 	if(this.last) {
 		if(ext.before=='last')
-			ext.before=this.last+0.001;
-		if(ext.after=='last')
-			ext.after=this.last-0.001;
+			ext.before=this.last+0.1;
+		if(ext.after=='last') {
+			ext.after=this.last-0.1;
+			var five_min_ago=new Date()/1000 - 300;
+			if(ext.after < five_min_ago)
+				ext.after=five_min_ago
+		}
 	}
 	return API.chats(this.token,Object.keys(this.users),ext)
 		.then(o=>{
