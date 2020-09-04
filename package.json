@@ -16,7 +16,7 @@
   "dependencies": {
     "breakpoint-sass": "^2.7.1",
     "express": "^4.16.4",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "node-sass-middleware": "^0.11.0"
   },
   "scripts": {
