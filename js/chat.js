@@ -1,5 +1,4 @@
-var request;
-var api_root = "https://www.hackmud.com"
+let request, api_root = "https://www.hackmud.com"
 
 if(typeof window!="undefined") {
 	// super quick and dirty browser wrapper
