@@ -2,7 +2,7 @@
 	<head>
 		<script>
 			if(document.location.href.startsWith('https://hackmud.com/chat'))
-				document.location.href='https://www.hackmud.com/chat'
+				document.location.href=document.location.href.replace(/^https:\/\/hackmud.com\/chat/,'https://www.hackmud.com/chat');
 		</script>
 		<script src="js/lib/jquery-1.12.4.min.js"></script>
 		<script src="js/chat.js"></script>
