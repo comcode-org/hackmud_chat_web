@@ -11,7 +11,8 @@
     "eyeglass": "^1.0",
     "mocha": "^5.2.0",
     "request": "^2.88.0",
-    "sinon": "^7.2.3"
+    "sinon": "^7.2.3",
+    "http-proxy-middleware": "^1.0.6"
   },
   "dependencies": {
     "breakpoint-sass": "^2.7.1",

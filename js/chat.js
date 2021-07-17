@@ -1,4 +1,4 @@
-var request;
+let request, api_root = "https://www.hackmud.com"
 
 if(typeof window!="undefined") {
 	// super quick and dirty browser wrapper
@@ -14,6 +14,11 @@ if(typeof window!="undefined") {
 		x.setRequestHeader('Accept','application/json');
 		x.send(JSON.stringify(ops.json))
 	}
+	// Find out if we're looking at hackmud itself, or a local proxy
+	if (!document.location.origin.includes("hackmud.com")) {
+		// Local proxy, configure API root
+		api_root = document.location.origin
+	}
 }
 else {
 	// Simple, straight forward node
@@ -21,11 +26,11 @@ else {
 }
 
 
-var API= {
-	domain_root: "www.hackmud.com",
+var API = {
+	domain_root: api_root,
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
-			request({ method: 'POST', uri: 'https://'+API.domain_root+'/mobile/'+endpoint+'.json', json:dat},
+			request({ method: 'POST', uri: API.domain_root+'/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
 					if(!error && response.statusCode == 200)
 						resolve(body)
