@@ -1,26 +1,25 @@
 {
   "name": "hackmud_chat_web",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:DrizzlyBear/hackmud_chat_web.git",
-  "author": "gubester <sean.gubelman@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "eyeglass": "^1.0",
-    "mocha": "^5.2.0",
-    "request": "^2.88.0",
-    "sinon": "^7.2.3"
-  },
-  "dependencies": {
-    "breakpoint-sass": "^2.7.1",
-    "express": "^4.16.4",
-    "node-sass": "^4.13.1",
-    "node-sass-middleware": "^0.11.0"
-  },
+  "author": "hackmud <support@hackmud.com>",
+  "main": "index.js",
   "scripts": {
     "dev": "node index.js",
     "test": "mocha"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "breakpoint-sass": "^2.7.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "express": "^4.16.4",
+    "eyeglass": "^1.0",
+    "mocha": "^5.2.0",
+    "node-sass": "^4.13.1",
+    "node-sass-middleware": "^0.11.0",
+    "request": "^2.88.0",
+    "sinon": "^7.2.3"
   }
 }
