@@ -1,6 +1,6 @@
 {
   "name": "hackmud_chat_web",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": "git@github.com:DrizzlyBear/hackmud_chat_web.git",
   "license": "MIT",
   "author": "hackmud <support@hackmud.com>",
@@ -15,11 +15,10 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "express": "^4.16.4",
-    "eyeglass": "^1.0",
-    "mocha": "^5.2.0",
-    "node-sass": "^4.13.1",
+    "eyeglass": "^3.0.3",
+    "mocha": "^9.1.1",
     "node-sass-middleware": "^0.11.0",
-    "request": "^2.88.0",
+    "sass": "^1.38.2",
     "sinon": "^7.2.3"
   }
 }

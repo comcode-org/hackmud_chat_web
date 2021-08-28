@@ -1,5 +1,5 @@
 const express = require('express')
-const sass = require('node-sass')
+const sass = require('sass')
 const sassMiddleware = require('node-sass-middleware')
 const eyeglass = require("eyeglass");
 
