@@ -9,7 +9,6 @@
     "dev": "node index.js",
     "test": "mocha"
   },
-  "dependencies": {},
   "devDependencies": {
     "breakpoint-sass": "^2.7.1",
     "chai": "^4.2.0",
@@ -17,8 +16,8 @@
     "express": "^4.16.4",
     "eyeglass": "^3.0.3",
     "mocha": "^9.1.1",
-    "node-sass-middleware": "^0.11.0",
-    "sass": "^1.38.2",
+    "node-sass-middleware": "^1.0.1",
+    "sass": "^1.56.1",
     "sinon": "^7.2.3"
   }
 }
