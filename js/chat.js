@@ -6,7 +6,13 @@ if(typeof window!="undefined") {
 		var x=new XMLHttpRequest();
 		x.onreadystatechange=function() {
 			if(x.readyState !== XMLHttpRequest.DONE)return;
-			cb(null,{statusCode:x.status},x.responseText?JSON.parse(x.responseText):[]);
+			var headers=x.getAllResponseHeaders().trim().split('\r\n');
+			var map={}
+			for(var i=0;i<headers.length;++i) {
+				headers[i]=headers[i].trim().split(': ');
+				map[headers[i].shift()]=headers[i].join(': ');
+			}
+			cb(null,{statusCode:x.status,headers:map},x.responseText?JSON.parse(x.responseText):[]);
 		}
 
 		x.open(ops.method,ops.uri);
@@ -21,12 +27,15 @@ else {
 }
 
 
+
+var LAST_SERVER_DATE=-1;
 var API= {
 	domain_root: "www.hackmud.com",
 	__promise_wrap:(endpoint,dat) => {
 		return new Promise( (resolve,reject) => {
 			request({ method: 'POST', uri: 'https://'+API.domain_root+'/mobile/'+endpoint+'.json', json:dat},
 				(error,response,body) => {
+					LAST_SERVER_DATE=new Date(response.headers.date)/1||-1;
 					if(!error && response.statusCode == 200)
 						resolve(body)
 					else {
@@ -124,7 +133,15 @@ Account.prototype.poll=function(ext={}) {
 			ext.before=this.last+0.1;
 		if(ext.after=='last') {
 			ext.after=this.last-0.1;
-			var five_min_ago=new Date()/1000 - 300;
+			var five_min_ago;
+			if(LAST_SERVER_DATE > 0) {
+				// if we have a last date from the server, we can use it to ensure we don't drift
+				five_min_ago=LAST_SERVER_DATE/1000 - 300;
+			}
+			else {
+				// reluctantly use local dates
+				five_min_ago=new Date()/1000 - 300;
+			}
 			if(ext.after < five_min_ago)
 				ext.after=five_min_ago
 		}
